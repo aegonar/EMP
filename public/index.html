@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>EPM</title>
+</head>
+<body>
+<script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+<script type="text/javascript">
+    Parse.initialize("2pWww3Mbn2k28ctC8O8G5Gtg4cVebSqXaMwNr0EC", "3db2YW8GZ7LBJqgwybtHhoKgBwmRWsJy4ZeiilcT");
+    
+    var currentUser = Parse.User.current();
+    if (currentUser) {
+        // do stuff with the user
+        console.log("Logged IN",currentUser);
+        location = "/views/home.html";
+
+    } else {
+        // show the signup or login page
+        console.log("Not Logged IN: ", currentUser);
+        location = "/views/index.html";
+    }
+
+    function handleParseError(err) {
+      switch (err.code) {
+        case Parse.Error.INVALID_SESSION_TOKEN:
+          Parse.User.logOut();
+          // If web browser, render a log in screen
+          // If Express.js, redirect the user to the log in route
+          break;
+
+        // Other Parse API errors that you want to explicitly handle
+      }
+    }
+  </script>
+</body>
+</html>

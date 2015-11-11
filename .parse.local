@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "Parnet": {
+      "applicationId": "2pWww3Mbn2k28ctC8O8G5Gtg4cVebSqXaMwNr0EC"
+    },
+    "_default": {
+      "link": "Parnet"
+    }
+  }
+}

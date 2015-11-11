@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/bootstrap.css">  <!-- Bootstrap 3 style -->
+  <link rel="stylesheet" href="/css/carousel.css"> <!-- Carousel style -->
+	<link rel="stylesheet" href="/css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="/css/signup.css"> <!-- Gem SignUp -->
+  <link rel="stylesheet" href="/css/sidebar.css"> <!-- Gem SideBar -->
+  <link rel="stylesheet" href="/css/flipclock.css"> <!-- Gem flipclock -->
+  <link rel="stylesheet" href="/css/selectordie.css"> <!-- Gem selectordie -->
+  <script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+  <script type="text/javascript" src="/js/jquery.litelighter.js"></script>
+  <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+
+  <style type="text/css">
+    .grid-item {
+      margin:0 auto;
+      /*width:325px;*/
+      width:90%;
+    }
+  </style>
+  	
+	<title>EPM</title>
+</head>
+<body>
+	<header class="cd-main-header">
+    <div id="cd-logo"><a class="navbar-brand" href="/home.html" style="font-size:40px; color:white;">{EPM}</a></div>
+    <!-- <a href="#0" class="cd-logo"><img src="img/cd-logo.svg" alt="Logo"></a> -->
+    
+    <!-- cd-search -->
+    <!-- <div class="cd-search is-hidden">
+      <form action="#0">
+        <input type="search" placeholder="Search...">
+      </form>
+    </div>  -->
+
+    <a href="#0" class="cd-nav-trigger"><span></span></a>
+
+    <nav class="cd-nav">
+      <ul class="cd-top-nav">
+        <!-- <li><a href="#0">Tour</a></li> -->
+        <!-- <li><a href="#0">Support</a></li> -->
+        <li class="has-children account">
+          <a href="#0">
+            <img src="/img/default-user.png" alt="avatar">
+            Account
+          </a>
+
+          <ul>
+
+            <li><a href="#0">My Account</a></li>
+            <li><a href="#0">Edit Account</a></li>
+            <li><a id="logout" onClick="logMeOut()" href="#0">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header> <!-- .cd-main-header -->
+
+  <main class="cd-main-content">
+    <nav class="cd-side-nav">
+      <ul>
+        <li class="cd-label">Main</li>
+        <li class="has-children overview">
+          <a href="#0">Overview</a>
+          
+          <ul>
+            <li><a href="#0">Current</a></li>
+            <li><a href="#0">History</a></li>
+            <li><a href="#0">Category</a></li>
+          </ul>
+        </li>
+        <li class="has-children notifications active">
+          <a href="#0">Notifications<span class="count">3</span></a>
+          
+          <ul>
+            <li><a href="#0">All Notifications</a></li>
+            <!-- <li><a href="#0">Friends</a></li> -->
+            <li><a href="#0">Other</a></li>
+          </ul>
+        </li>
+
+        <!-- <li class="has-children comments">
+          <a href="#0">Comments</a>
+          
+          <ul>
+            <li><a href="#0">All Comments</a></li>
+            <li><a href="#0">Edit Comment</a></li>
+            <li><a href="#0">Delete Comment</a></li>
+          </ul>
+        </li> -->
+      </ul>
+
+      <ul>
+        <li class="cd-label">Secondary</li>
+
+        <li class="has-children users">
+          <a href="#0">Users</a>
+          
+          <ul>
+            <li><a href="#0">All Users</a></li>
+            <li><a href="#0">Edit User</a></li>
+            <li><a href="#0">Add User</a></li>
+          </ul>
+        </li>
+
+        <li class="has-children bookmarks">
+          <a href="#0">Bookmarks</a>
+          
+          <ul>
+            <li><a href="#0">All Bookmarks</a></li>
+            <li><a href="#0">Edit Bookmark</a></li>
+            <li><a href="#0">Import Bookmark</a></li>
+          </ul>
+        </li>
+        <li class="has-children images">
+          <a href="#0">Images</a>
+          
+          <ul>
+            <li><a href="#0">All Images</a></li>
+            <li><a href="#0">Edit Image</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <ul>
+        <li class="cd-label">Action</li>
+        <li id="toggleClock" class="action-btn" ><a href="#0" onClick="toggClock()">Toggle Clock</a></li>
+      </ul>
+    </nav>
+
+    <div class="content-wrapper grid" style="text-align:center;">
+      <!-- <h1>Responsive Sidebar Navigation</h1> -->
+      <div class="timer grid-item" style="display:inline-block; margin-top:2em;">
+        <div class="clock" style=""></div>
+        <div class="cost featurette-heading" style="margin-top:5px;">$0.00</div>
+      </div>
+
+      <div class="grid-item" style="display:inline-block; margin-top:2em;">
+        <select class="basic">
+            <option value="null">Select a Car</option>
+        </select>
+      </div>
+      
+
+
+
+    </div> <!-- .content-wrapper
+
+    <!-- FOOTER -->
+    <!-- <footer class="content-wrapper">
+      <p class="pull-right"><a href="#">Back to top</a></p>
+      <p>&copy; 2015 EPM, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+    </footer> -->
+
+
+  </main> <!-- .cd-main-content -->
+    </div><!-- /.container -->
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script type="text/javascript">
+    
+    
+    $(document).ready(function($) {
+
+      Parse.initialize("2pWww3Mbn2k28ctC8O8G5Gtg4cVebSqXaMwNr0EC", "3db2YW8GZ7LBJqgwybtHhoKgBwmRWsJy4ZeiilcT");
+    
+    var currentUser = Parse.User.current();
+    if (currentUser) {
+        // do stuff with the user
+        console.log("Logged IN",currentUser);
+    } else {
+        // show the signup or login page
+        location = "/index.html";
+    }
+
+    function handleParseError(err) {
+      switch (err.code) {
+        case Parse.Error.INVALID_SESSION_TOKEN:
+          Parse.User.logOut();
+          // If web browser, render a log in screen
+          // If Express.js, redirect the user to the log in route
+          break;
+
+        // Other Parse API errors that you want to explicitly handle
+      }
+    }
+
+    var userTags;
+    var userVehicles;
+
+    var getTag = Parse.Object.extend("Tag");
+    var tagQuery = new Parse.Query(getTag);
+    tagQuery.equalTo("userID",currentUser);
+    tagQuery.find().then(function(results){
+
+      userTags = results;
+      console.log("User Tags", userTags);
+      
+
+      var getVeh = Parse.Object.extend("Vehicle");
+      var vehQuery = new Parse.Query(getVeh);
+
+      vehQuery.containedIn("tagID", userTags);
+      vehQuery.find().then(function(results){
+        userVehicles = results;
+        console.log("cars", userVehicles);
+
+        if(userVehicles.forEach){
+          userVehicles.forEach(function(car){
+            console.log("CAR", car.attributes);
+            
+            $(".basic").append("<option value="+car.attributes.tagID.id+">"+(car.attributes.make ? car.attributes.make:"")+" "+(car.attributes.model ? car.attributes.model:"")+"</option>");
+            $("select").selectOrDie("update");
+          });
+        }
+
+      });
+
+    });
+    var currentTimer;
+    var currentTag;
+    var currentRate;
+    var currentCost = 0.00;
+    var daysPassed = 0;
+    var getTime = function(tagID){
+
+      clock.setTime(0);
+      clock.stop();
+      currentCost = 0.00;
+      daysPassed = 0;
+
+      var tagP = {"__type":"Pointer","className":"Tag","objectId":tagID};
+      var getTag = Parse.Object.extend("History");
+      var tagQuery = new Parse.Query(getTag);
+      tagQuery.equalTo("tagID",tagP);
+      tagQuery.equalTo("paid",false);
+      tagQuery.find().then(function(results){
+        console.log("timeResults", results, tagP);
+        if(results.forEach){
+          results.forEach(function(hist){
+            // console.log(hist.attributes);
+            currentTag = hist;
+            var today = new Date();
+            if(!hist.attributes.out){
+              console.log("NOT OUT", hist.attributes.in, today);
+              currentTimer = new Date(today.getTime() - hist.attributes.in.getTime());
+              console.log(currentTimer);
+              daysPassed = Math.ceil((currentTimer / (1000 * 3600 * 24))-1);
+              console.log("diff Days",daysPassed);
+              console.log("cTime",currentTimer.getHours(),currentTimer.getMinutes(), currentTimer.getSeconds());
+              clock.setTime(currentTimer.getHours()*3600 + currentTimer.getMinutes()*60 + currentTimer.getSeconds());
+              clock.start();
+
+            }
+          });
+        }
+      }).then(function(){
+        console.log("THEN!", currentTag);
+        console.log("ParkingID?", currentTag.get("parkingID"));
+        var parkP = {"__type":"Pointer","className":"Tag","objectId":tagID};
+        var getRate = Parse.Object.extend("Rate");
+        var ratQuery = new Parse.Query(getRate);
+        ratQuery.equalTo("parkingID",currentTag.get("parkingID"));
+        ratQuery.first().then(function(result){
+          console.log("Rates?",result);
+          currentRate = result;
+        });
+      });
+
+    };
+    
+
+    var logMeOut = function(event){
+      // event.preventDefault();
+      Parse.User.logOut();
+      console.log("Logged OUT");
+      location = "/index.html";
+    };
+
+    var toggClock = function(){
+      if(!isRunning){
+        console.log("should run");
+        clock.start(function(){});
+        isRunning = true;
+      }else{
+        console.log("should stop");
+        clock.stop(function(){});
+        isRunning = false;
+      }
+    }
+
+
+    var isRunning = false;
+    var clock;
+
+      clock = $('.clock').FlipClock({
+          clockFace: 'DailyCounter',
+          countdown: false,
+          showSeconds: false,
+          autoStart: false,
+          callbacks: {
+              stop: function() {
+                $('.cost').html("$0.00");
+              },
+              interval: function() {
+                var time = this.factory.getTime().time;
+                // console.log("TIME",time);
+                var count = time;
+                var cost = 0;
+                console.log("passed?",daysPassed);
+                if(time && currentRate && currentRate.attributes) {
+                  // console.log('interval', time);
+                  if(count >= 3600){
+                    cost = cost + currentRate.attributes.main;
+                    count = count - 3600;
+                    while(count >= 3600){
+                      cost = cost + currentRate.attributes.perHour;
+                      count = count - 3600;
+                    }
+                    if(daysPassed && currentRate && currentRate.attributes){
+                      var dayCount = daysPassed*24*3600;
+                      if(currentRate.attributes.day){
+                        cost =  cost + (dayCount)*currentRate.attributes.day;
+                      }else{
+                        cost = cost + currentRate.attributes.main;
+                        dayCount = dayCount - 3600;
+                        while(dayCount >= 3600){
+                          cost = cost + currentRate.attributes.perHour;
+                          dayCount = dayCount - 3600;
+                        }
+                      }
+                      $('.cost').tooltip({title: "Days Overdue: "+daysPassed, container: ".timer"});
+                    }
+                    $('.cost').html("$"+(cost).toFixed(2));
+
+
+
+                     
+                  }
+                }
+              }
+            }
+        });
+
+        $('.grid').masonry({
+          // options...
+          itemSelector: '.grid-item',
+          columnWidth: 325,
+        });
+
+        $("select").selectOrDie({
+          onChange: function() { getTime($(this).val()); }
+        });
+
+    });
+
+  </script>
+<script src="/js/flipclock.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
+<script type="text/javascript" src="/js/jquery.menu-aim.js"></script>
+<!-- <script type="text/javascript" src="/js/tether.min.js"></script> -->
+<script type="text/javascript" src="/js/selectordie.js"></script>
+<script src="/js/bootstrap.min.js"></script> <!-- Bootstrap -->
+<script src="/js/sidebar.js"></script> <!-- Gem jQuery -->
+</body>
+</html>
