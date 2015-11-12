@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>EPM</title>
+</head>
+<body>
+
+<script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+<script type="text/javascript">
+    Parse.initialize("2pWww3Mbn2k28ctC8O8G5Gtg4cVebSqXaMwNr0EC", "3db2YW8GZ7LBJqgwybtHhoKgBwmRWsJy4ZeiilcT");
+    
+
+
+var getUserId = Parse.Object.extend("Tag"); //search "Tag" table for the user of received tag
+var getUserIdQuery = new Parse.Query(getUserId);
+
+//getUserIdQuery.include('userID');
+
+getUserIdQuery.equalTo("rfidTag", "E00700001ED1B181");
+
+var userName;
+var userID;
+
+getUserIdQuery.first({
+  success: function(object) {
+
+    if (typeof(object) == 'undefined') {
+    console.log("nothing found");
+  }else{
+    console.log("Successfully retrieved something-userID");
+    // Do something with the returned Parse.Object values
+   // for (var i = 0; i < results.length; i++) {
+      //var object = results[0];
+      //alert(object.id + ' - ' + object.get('userID'));
+      //result= results.length
+      console.log("object " + JSON.stringify(object));  //magic
+      console.log("userID " + JSON.stringify(object.get('userID')));  //magic
+      console.log("userID " + JSON.stringify(object.get('userID').id));  //magic
+
+      userID=object.get('userID').id;   //black magic
+      //result="RESULT"
+
+      console.log("Result " + userID);
+
+}
+
+
+console.log("Getting userName");
+
+console.log("send " + JSON.stringify(object.get('userID'))); 
+userName=get_userName_from_userId(object.get('userID'));
+//userName=get_userName_from_userId(userID);
+
+console.log("function result " + userName);
+console.log("function result json " + JSON.stringify(userName));
+
+/*
+var user = new Parse.User();
+user.id = userID;
+
+//var getUserName = Parse.Object.extend("_User"); //search "Tag" table for the user of received tag
+var getUserNameQuery = new Parse.Query(Parse.User);
+
+
+//getUserNameQuery.include('username');
+
+getUserNameQuery.equalTo('objectId', user);
+
+
+getUserNameQuery.find({
+ success: function(results) {
+    console.log("Successfully retrieved something-userName");
+    // Do something with the returned Parse.Object values
+    for (var i = 0; i < results.length; i++) {
+      var object = results[0];
+      //alert(object.id + ' - ' + object.get('userID'));
+      //result= results.length
+      userName=object.get('username');
+      //result="RESULT"
+      console.log("Result " + userName);
+}
+console.log("Empty");
+  },
+  error: function(error) {
+   console.log("Error: " + error.code + " " + error.message);
+   result="Error"
+ }
+});
+*/
+/*
+var user = new Parse.User();
+user.id = userID;
+
+    var id = user.id;
+
+    //When getUser(id) is called a promise is returned. Notice the .then this means that once the promise is fulfilled it will continue. See getUser() function below.
+    getUser(id).then
+    (   
+        //When the promise is fulfilled function(user) fires, and now we have our USER!
+        function(user)
+        {
+            //response.success(user);
+            console.log("Result " + user);
+        }
+        ,
+        function(error)
+        {
+            //response.error(error);
+            console.log("Result " + error);
+        }
+    );
+
+//});
+*/
+
+
+    //}
+  },
+  error: function(error) {
+    console.log("Error: " + error.code + " " + error.message);
+    result="Error"
+  }
+});
+
+
+
+
+
+
+
+//Parse.Cloud.define("getUserId", function(request, response) 
+//{
+    //Example where an objectId is passed to a cloud function.
+//     var id = request.params.objectId;
+
+//     //When getUser(id) is called a promise is returned. Notice the .then this means that once the promise is fulfilled it will continue. See getUser() function below.
+//     getUser(id).then
+//     (   
+//         //When the promise is fulfilled function(user) fires, and now we have our USER!
+//         function(user)
+//         {
+//             response.success(user);
+//         }
+//         ,
+//         function(error)
+//         {
+//             response.error(error);
+//         }
+//     );
+
+// });
+
+function get_userName_from_userId(userId, callback)
+{
+
+
+//--------
+//function some_cback(callback) {
+//--------
+
+    //Parse.Cloud.useMasterKey();
+  var getName = Parse.Object.extend("UserInfo"); //search "Tag" table for the user of received tag
+  var getNameQuery = new Parse.Query(getName);
+
+  //getNameQuery.include('userID');
+
+  getNameQuery.equalTo("userID", userId);
+
+console.log("json userid " + JSON.stringify(userId));
+console.log("json userid.id " + JSON.stringify(userId.id));
+
+  var userName;
+
+  getNameQuery.first({
+    success: function(object){
+
+      if(typeof(object) == 'undefined'){
+          //response.error("No user's name found");
+          console.log("User name undefined");  //magic
+      }else{
+          userName=object.get('Name');
+          //response.success(userName); //tag's userId
+          //console.log("Result 1 " + JSON.stringify(object.get('Name')));  //magic
+          //console.log("Result 2 " + JSON.stringify(userName));  //magic
+          console.log("userName " + userName);  //magic
+          //return userName;
+          //callback(userName);
+
+          //--------
+
+          //--------
+      }
+
+    },
+    error: function(error){
+      //response.error("Parse error");
+      console.log("get_userName_from_userId error");  //magic
+    }
+  });
+
+
+//--------
+// }
+//--------
+
+  console.log("return value " + userName);  //magic
+  return userName;
+
+//--------
+// var something = some_cback(function(response) {
+//     console.log(response);
+// });
+//--------
+// console.log("returning " + something);
+// return something;
+
+}
+
+
+
+  </script>
+</body>
+</html>

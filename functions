@@ -1,0 +1,17 @@
+#!/bin/bash
+
+export APPLICATION_ID="2pWww3Mbn2k28ctC8O8G5Gtg4cVebSqXaMwNr0EC"
+export REST_API_KEY="j756np5bQRVjzISZOAoHXiBM2SgHClEQ0fiVq8R7"
+
+export DATA='{"TAG":"E00700001ED1B181-"}'
+#export DATA='{"__type":"Pointer","className":"_User","objectId":"YryOATszCd"}'
+
+#export FUNCTION="get_userName_from_userId"
+export FUNCTION="get_username_from_tag"
+
+curl -X POST \
+ -H "X-Parse-Application-Id: ${APPLICATION_ID}" \
+ -H "X-Parse-REST-API-Key: ${REST_API_KEY}" \
+ -H "Content-Type: application/json" \
+ -d "${DATA}" \
+ https://api.parse.com/1/functions/$FUNCTION
