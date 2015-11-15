@@ -460,6 +460,24 @@ Sidebar
 .cd-side-nav > ul > li.users > a::before {
   background-position: -16px 0;
 }
+.cd-side-nav > ul > li.cars > a::before {
+  background-position: -98px 0;
+}
+.cd-side-nav > ul > li.parking > a::before {
+  background-position: -114px 0;
+}
+.cd-side-nav > ul > li.tag > a::before {
+  background-position: -132px 0;
+}
+.cd-side-nav > ul > li.traffic > a::before {
+  background-position: -148px 0;
+}
+.cd-side-nav > ul > li.dollar > a::before {
+  background-position: -164px 0;
+}
+.cd-side-nav > ul > li.ping > a::before {
+  background-position: -180px 0;
+}
 .cd-side-nav .count {
   /* notification badge */
   position: absolute;
