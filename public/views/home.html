@@ -29,7 +29,7 @@
 </head>
 <body>
 	<header class="cd-main-header">
-    <div id="cd-logo"><a class="navbar-brand" href="/home.html" style="font-size:40px; color:white;">{EPM}</a></div>
+    <div id="cd-logo"><a class="navbar-brand" href="/views/home.html" style="font-size:40px; color:white;">{EPM}</a></div>
     <!-- <a href="#0" class="cd-logo"><img src="img/cd-logo.svg" alt="Logo"></a> -->
     
     <!-- cd-search -->
@@ -43,7 +43,7 @@
 
     <nav class="cd-nav">
       <ul class="cd-top-nav">
-        <!-- <li><a href="#0">Tour</a></li> -->
+        <li><a href="#0" class="walletCount">Wallet</a></li>
         <!-- <li><a href="#0">Support</a></li> -->
         <li class="has-children account">
           <a href="#0">
@@ -66,7 +66,7 @@
     <nav class="cd-side-nav">
       <ul>
         <li class="cd-label">Main</li>
-        <li class="has-children overview">
+        <li class="has-children overview active">
           <a href="#0">Overview</a>
           
           <ul>
@@ -75,8 +75,8 @@
             <li><a href="#0">Category</a></li>
           </ul>
         </li>
-        <li class="has-children notifications active">
-          <a href="#0">Notifications<span class="count">3</span></a>
+        <li class="has-children notifications">
+          <a href="#0">Notifications<span class="notiCount">0</span></a>
           
           <ul>
             <li><a href="#0">All Notifications</a></li>
@@ -99,45 +99,46 @@
       <ul>
         <li class="cd-label">Secondary</li>
 
-        <li class="has-children users">
-          <a href="#0">Users</a>
+        <li class="has-children dollar">
+          <a href="/views/wallet/manage.html">Wallet</a>
           
           <ul>
-            <li><a href="#0">All Users</a></li>
-            <li><a href="#0">Edit User</a></li>
-            <li><a href="#0">Add User</a></li>
+            <!-- <li><a href="#0">View Wallet</a></li> -->
+            <li><a href="/views/wallet/manage.html">Manage Wallet</a></li>
+            <li><a href="#0">Add Credits</a></li>
           </ul>
         </li>
 
-        <li class="has-children bookmarks">
-          <a href="#0">Bookmarks</a>
+        <li class="has-children tag">
+          <a href="#0">Tags</a>
           
           <ul>
-            <li><a href="#0">All Bookmarks</a></li>
-            <li><a href="#0">Edit Bookmark</a></li>
-            <li><a href="#0">Import Bookmark</a></li>
+            <!-- <li><a href="#0">All Tags</a></li> -->
+            <li><a href="#0">Manage Tags</a></li>
+            <li><a href="#0">Import Tag</a></li>
           </ul>
         </li>
-        <li class="has-children images">
-          <a href="#0">Images</a>
+        <li class="has-children cars">
+          <a href="#0">Cars</a>
           
           <ul>
-            <li><a href="#0">All Images</a></li>
-            <li><a href="#0">Edit Image</a></li>
+            <!-- <li><a href="#0">All Cars</a></li> -->
+            <li><a href="#0">Manage Cars</a></li>
           </ul>
         </li>
       </ul>
 
-      <ul>
+ <!--      <ul>
         <li class="cd-label">Action</li>
         <li id="toggleClock" class="action-btn" ><a href="#0" onClick="toggClock()">Toggle Clock</a></li>
-      </ul>
+      </ul> -->
     </nav>
 
     <div class="content-wrapper grid" style="text-align:center;">
       <!-- <h1>Responsive Sidebar Navigation</h1> -->
       <div class="timer grid-item" style="display:inline-block; margin-top:2em;">
         <div class="clock" style=""></div>
+        <div class="days featurette-heading" style="margin-top:5px;"></div>
         <div class="cost featurette-heading" style="margin-top:5px;">$0.00</div>
       </div>
 
@@ -165,64 +166,81 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script type="text/javascript">
     
-    
+    var logMeOut = function(event){
+      // event.preventDefault();
+      Parse.User.logOut();
+      console.log("Logged OUT");
+      location = "/index.html";
+    };
+
     $(document).ready(function($) {
 
       Parse.initialize("2pWww3Mbn2k28ctC8O8G5Gtg4cVebSqXaMwNr0EC", "3db2YW8GZ7LBJqgwybtHhoKgBwmRWsJy4ZeiilcT");
     
-    var currentUser = Parse.User.current();
-    if (currentUser) {
-        // do stuff with the user
-        console.log("Logged IN",currentUser);
-    } else {
-        // show the signup or login page
-        location = "/index.html";
-    }
-
-    function handleParseError(err) {
-      switch (err.code) {
-        case Parse.Error.INVALID_SESSION_TOKEN:
-          Parse.User.logOut();
-          // If web browser, render a log in screen
-          // If Express.js, redirect the user to the log in route
-          break;
-
-        // Other Parse API errors that you want to explicitly handle
+      var currentUser = Parse.User.current();
+      if (currentUser) {
+          // do stuff with the user
+          console.log("Logged IN",currentUser);
+      } else {
+          // show the signup or login page
+          location = "/index.html";
       }
-    }
 
-    var userTags;
-    var userVehicles;
+      function handleParseError(err) {
+        switch (err.code) {
+          case Parse.Error.INVALID_SESSION_TOKEN:
+            Parse.User.logOut();
+            // If web browser, render a log in screen
+            // If Express.js, redirect the user to the log in route
+            break;
 
-    var getTag = Parse.Object.extend("Tag");
-    var tagQuery = new Parse.Query(getTag);
-    tagQuery.equalTo("userID",currentUser);
-    tagQuery.find().then(function(results){
-
-      userTags = results;
-      console.log("User Tags", userTags);
-      
-
-      var getVeh = Parse.Object.extend("Vehicle");
-      var vehQuery = new Parse.Query(getVeh);
-
-      vehQuery.containedIn("tagID", userTags);
-      vehQuery.find().then(function(results){
-        userVehicles = results;
-        console.log("cars", userVehicles);
-
-        if(userVehicles.forEach){
-          userVehicles.forEach(function(car){
-            console.log("CAR", car.attributes);
-            
-            $(".basic").append("<option value="+car.attributes.tagID.id+">"+(car.attributes.make ? car.attributes.make:"")+" "+(car.attributes.model ? car.attributes.model:"")+"</option>");
-            $("select").selectOrDie("update");
-          });
+          // Other Parse API errors that you want to explicitly handle
         }
+      }
+
+      var userTags;
+      var userVehicles;
+
+      var getTag = Parse.Object.extend("Tag");
+      var tagQuery = new Parse.Query(getTag);
+      tagQuery.equalTo("userID",currentUser);
+      tagQuery.find().then(function(results){
+        userTags = results;
+        console.log("User Tags", userTags);
+        var getVeh = Parse.Object.extend("Vehicle");
+        var vehQuery = new Parse.Query(getVeh);
+
+        vehQuery.containedIn("tagID", userTags);
+        vehQuery.find().then(function(results){
+          userVehicles = results;
+          console.log("cars", userVehicles);
+
+          if(userVehicles.forEach){
+            userVehicles.forEach(function(car){
+              console.log("CAR", car.attributes);
+              
+              $(".basic").append("<option value="+car.attributes.tagID.id+">"+(car.attributes.make ? car.attributes.make:"")+" "+(car.attributes.model ? car.attributes.model:"")+"</option>");
+              $("select").selectOrDie("update");
+            });
+          }
+
+        });
 
       });
 
+
+    var myWallet = Parse.Object.extend("Wallet");
+    var walletQuery = new Parse.Query(myWallet);
+    walletQuery.equalTo("userID",currentUser);
+    walletQuery.first().then(function(result){
+      console.log("Wallet", result);
+      $('.walletCount').html("Wallet $"+ (result.attributes.credits).toFixed(2));
+        
+
     });
+
+
+
     var currentTimer;
     var currentTag;
     var currentRate;
@@ -276,87 +294,69 @@
     };
     
 
-    var logMeOut = function(event){
-      // event.preventDefault();
-      Parse.User.logOut();
-      console.log("Logged OUT");
-      location = "/index.html";
-    };
-
-    var toggClock = function(){
-      if(!isRunning){
-        console.log("should run");
-        clock.start(function(){});
-        isRunning = true;
-      }else{
-        console.log("should stop");
-        clock.stop(function(){});
-        isRunning = false;
-      }
-    }
+    
 
 
-    var isRunning = false;
+   
     var clock;
-
-      clock = $('.clock').FlipClock({
-          clockFace: 'DailyCounter',
-          countdown: false,
-          showSeconds: false,
-          autoStart: false,
-          callbacks: {
-              stop: function() {
-                $('.cost').html("$0.00");
-              },
-              interval: function() {
-                var time = this.factory.getTime().time;
-                // console.log("TIME",time);
-                var count = time;
-                var cost = 0;
-                console.log("passed?",daysPassed);
-                if(time && currentRate && currentRate.attributes) {
-                  // console.log('interval', time);
-                  if(count >= 3600){
-                    cost = cost + currentRate.attributes.main;
+    clock = $('.clock').FlipClock({
+        clockFace: 'DailyCounter',
+        countdown: false,
+        showSeconds: false,
+        autoStart: false,
+        callbacks: {
+            stop: function() {
+              $('.cost').html("$0.00");
+              $('.days').html("");
+              // $('.cost').tooltip("destroy");
+            },
+            interval: function() {
+              var time = this.factory.getTime().time;
+              // console.log("TIME",time);
+              var count = time;
+              var cost = 0;
+              console.log("passed?",daysPassed);
+              if(time && currentRate && currentRate.attributes) {
+                // console.log('interval', time);
+                if(count >= 3600){
+                  cost = cost + currentRate.attributes.main;
+                  count = count - 3600;
+                  while(count >= 3600){
+                    cost = cost + currentRate.attributes.perHour;
                     count = count - 3600;
-                    while(count >= 3600){
-                      cost = cost + currentRate.attributes.perHour;
-                      count = count - 3600;
-                    }
-                    if(daysPassed && currentRate && currentRate.attributes){
-                      var dayCount = daysPassed*24*3600;
-                      if(currentRate.attributes.day){
-                        cost =  cost + (dayCount)*currentRate.attributes.day;
-                      }else{
-                        cost = cost + currentRate.attributes.main;
-                        dayCount = dayCount - 3600;
-                        while(dayCount >= 3600){
-                          cost = cost + currentRate.attributes.perHour;
-                          dayCount = dayCount - 3600;
-                        }
-                      }
-                      $('.cost').tooltip({title: "Days Overdue: "+daysPassed, container: ".timer"});
-                    }
-                    $('.cost').html("$"+(cost).toFixed(2));
-
-
-
-                     
                   }
+                  if(daysPassed && currentRate && currentRate.attributes){
+                    var dayCount = daysPassed*24*3600;
+                    if(currentRate.attributes.day){
+                      cost =  cost + (dayCount)*currentRate.attributes.day;
+                    }else{
+                      cost = cost + currentRate.attributes.main;
+                      dayCount = dayCount - 3600;
+                      while(dayCount >= 3600){
+                        cost = cost + currentRate.attributes.perHour;
+                        dayCount = dayCount - 3600;
+                      }
+                    }
+                    $('.days').html(daysPassed + " Days");
+                    // $('.cost').tooltip({title: "Days Overdue: "+daysPassed, container: ".timer"});
+                  }
+                  $('.cost').html("$"+(cost).toFixed(2));
+   
                 }
               }
             }
-        });
+          }
+      });
 
-        $('.grid').masonry({
-          // options...
-          itemSelector: '.grid-item',
-          columnWidth: 325,
-        });
+      // $('.grid').masonry({
+      //   // options...
+      //   itemSelector: '.grid-item',
+      //   columnWidth: 325,
+      // });
 
-        $("select").selectOrDie({
-          onChange: function() { getTime($(this).val()); }
-        });
+      $("select").selectOrDie({
+        onChange: function() { getTime($(this).val()); }
+      });
 
     });
 
