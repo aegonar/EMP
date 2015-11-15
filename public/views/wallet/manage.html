@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/bootstrap.css">  <!-- Bootstrap 3 style -->
+  <link rel="stylesheet" href="/css/carousel.css"> <!-- Carousel style -->
+	<link rel="stylesheet" href="/css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="/css/signup.css"> <!-- Gem SignUp -->
+  <link rel="stylesheet" href="/css/sidebar.css"> <!-- Gem SideBar -->
+  <link rel="stylesheet" href="/css/flipclock.css"> <!-- Gem flipclock -->
+  <link rel="stylesheet" href="/css/selectordie.css"> <!-- Gem selectordie -->
+  <script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+  <script type="text/javascript" src="/js/jquery.litelighter.js"></script>
+  <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+
+  <style type="text/css">
+    .grid-item {
+      margin:0 auto;
+      /*width:325px;*/
+      width:90%;
+    }
+  </style>
+  	
+	<title>EPM</title>
+</head>
+<body>
+	<header class="cd-main-header">
+    <div id="cd-logo"><a class="navbar-brand" href="/views/home.html" style="font-size:40px; color:white;">{EPM}</a></div>
+    <!-- <a href="#0" class="cd-logo"><img src="img/cd-logo.svg" alt="Logo"></a> -->
+    
+    <!-- cd-search -->
+    <!-- <div class="cd-search is-hidden">
+      <form action="#0">
+        <input type="search" placeholder="Search...">
+      </form>
+    </div>  -->
+
+    <a href="#0" class="cd-nav-trigger"><span></span></a>
+
+    <nav class="cd-nav">
+      <ul class="cd-top-nav">
+        <li><a href="#0" class="walletCount">Wallet</a></li>
+        <!-- <li><a href="#0">Support</a></li> -->
+        <li class="has-children account">
+          <a href="#0">
+            <img src="/img/default-user.png" alt="avatar">
+            Account
+          </a>
+
+          <ul>
+
+            <li><a href="#0">My Account</a></li>
+            <li><a href="#0">Edit Account</a></li>
+            <li><a id="logout" onClick="logMeOut()" href="#0">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header> <!-- .cd-main-header -->
+
+  <main class="cd-main-content">
+    <nav class="cd-side-nav">
+      <ul>
+        <li class="cd-label">Main</li>
+        <li class="has-children overview">
+          <a href="/views/home.html">Overview</a>
+          
+          <ul>
+            <li><a href="#0">Current</a></li>
+            <li><a href="#0">History</a></li>
+            <li><a href="#0">Category</a></li>
+          </ul>
+        </li>
+        <li class="has-children notifications">
+          <a href="#0">Notifications<span class="notiCount">0</span></a>
+          
+          <ul>
+            <li><a href="#0">All Notifications</a></li>
+            <!-- <li><a href="#0">Friends</a></li> -->
+            <li><a href="#0">Other</a></li>
+          </ul>
+        </li>
+
+        <!-- <li class="has-children comments">
+          <a href="#0">Comments</a>
+          
+          <ul>
+            <li><a href="#0">All Comments</a></li>
+            <li><a href="#0">Edit Comment</a></li>
+            <li><a href="#0">Delete Comment</a></li>
+          </ul>
+        </li> -->
+      </ul>
+
+      <ul>
+        <li class="cd-label">Secondary</li>
+
+        <li class="has-children dollar active">
+          <a href="#0">Wallet</a>
+          
+          <ul>
+            <!-- <li><a href="#0">View Wallet</a></li> -->
+            <li><a href="#0">Manage Wallet</a></li>
+            <li><a href="#0">Add Credits</a></li>
+          </ul>
+        </li>
+
+        <li class="has-children tag">
+          <a href="#0">Tags</a>
+          
+          <ul>
+            <!-- <li><a href="#0">All Tags</a></li> -->
+            <li><a href="#0">Manage Tags</a></li>
+            <li><a href="#0">Import Tag</a></li>
+          </ul>
+        </li>
+        <li class="has-children cars">
+          <a href="#0">Cars</a>
+          
+          <ul>
+            <!-- <li><a href="#0">All Cars</a></li> -->
+            <li><a href="#0">Manage Cars</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="content-wrapper grid" style="text-align:center;">
+      <p class="pageTitle featurette-heading" style="margin-top:45px;">Manage Wallet</p>
+      <div class="timer grid-item" style="display:inline-block; margin-top:2em;">
+        <div class="wallet featurette-heading" style="margin-top:5px;">$0.00</div>
+      </div>
+
+      <div class="grid-item" style="display:inline-block; margin-top:2em;">
+        <form action="" method="POST">
+          <script
+            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="pk_test_5jURqGPxHHyGNcwW5EjL7M6Y"
+            data-amount="2000"
+            data-name="EPM"
+            data-description="Add Credit ($20.00)"
+            data-image="/img/EPM/logo2.png"
+            data-locale="auto">
+          </script>
+        </form>
+          <li id="addCredits" class="action-btn" ><a href="#0" onClick="addCredits()">Add Credits</a></li>
+      </div>
+      
+
+
+
+    </div> <!-- .content-wrapper
+
+    <!-- FOOTER -->
+    <!-- <footer class="content-wrapper">
+      <p class="pull-right"><a href="#">Back to top</a></p>
+      <p>&copy; 2015 EPM, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+    </footer> -->
+
+
+  </main> <!-- .cd-main-content -->
+    </div><!-- /.container -->
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script type="text/javascript">
+    
+    var logMeOut = function(event){
+      // event.preventDefault();
+      Parse.User.logOut();
+      console.log("Logged OUT");
+      location = "/index.html";
+    };
+
+    $(document).ready(function($) {
+
+      Parse.initialize("2pWww3Mbn2k28ctC8O8G5Gtg4cVebSqXaMwNr0EC", "3db2YW8GZ7LBJqgwybtHhoKgBwmRWsJy4ZeiilcT");
+    
+      var currentUser = Parse.User.current();
+      if (currentUser) {
+          // do stuff with the user
+          console.log("Logged IN",currentUser);
+          $('.pageTitle').html(currentUser.attributes.username + "'s Wallet");
+          
+      } else {
+          // show the signup or login page
+          location = "/index.html";
+      }
+
+      function handleParseError(err) {
+        switch (err.code) {
+          case Parse.Error.INVALID_SESSION_TOKEN:
+            Parse.User.logOut();
+            break;
+        }
+      }
+
+    var myWallet = Parse.Object.extend("Wallet");
+    var walletQuery = new Parse.Query(myWallet);
+    walletQuery.equalTo("userID",currentUser);
+    walletQuery.first().then(function(result){
+      console.log("Wallet", result);
+      $('.walletCount').html("Wallet $"+ (result.attributes.credits).toFixed(2));
+      $('.wallet').html("$"+(result.attributes.credits).toFixed(2));
+    });
+    
+    
+
+      // $('.grid').masonry({
+      //   // options...
+      //   itemSelector: '.grid-item',
+      //   columnWidth: 325,
+      // });
+
+    });
+
+  </script>
+<script src="/js/flipclock.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
+<script type="text/javascript" src="/js/jquery.menu-aim.js"></script>
+<!-- <script type="text/javascript" src="/js/tether.min.js"></script> -->
+<script type="text/javascript" src="/js/selectordie.js"></script>
+<script src="/js/bootstrap.min.js"></script> <!-- Bootstrap -->
+<script src="/js/sidebar.js"></script> <!-- Gem jQuery -->
+</body>
+</html>
