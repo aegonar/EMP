@@ -23,6 +23,9 @@
       /*width:325px;*/
       width:90%;
     }
+    .padMe {
+      margin: 5px;
+    }
   </style>
   	
 	<title>EPM</title>
@@ -69,31 +72,21 @@
         <li class="has-children overview">
           <a href="/views/home.html">Overview</a>
           
-          <ul>
+          <!-- <ul>
             <li><a href="#0">Current</a></li>
             <li><a href="#0">History</a></li>
             <li><a href="#0">Category</a></li>
-          </ul>
+          </ul> -->
         </li>
         <li class="has-children notifications">
-          <a href="#0">Notifications<span class="notiCount">0</span></a>
+          <a href="#0">Notifications<span class="notiCount"></span></a>
           
-          <ul>
+          <!-- <ul>
             <li><a href="#0">All Notifications</a></li>
-            <!-- <li><a href="#0">Friends</a></li> -->
+            <li><a href="#0">Friends</a></li>
             <li><a href="#0">Other</a></li>
-          </ul>
+          </ul> -->
         </li>
-
-        <!-- <li class="has-children comments">
-          <a href="#0">Comments</a>
-          
-          <ul>
-            <li><a href="#0">All Comments</a></li>
-            <li><a href="#0">Edit Comment</a></li>
-            <li><a href="#0">Delete Comment</a></li>
-          </ul>
-        </li> -->
       </ul>
 
       <ul>
@@ -104,27 +97,27 @@
           
           <ul>
             <!-- <li><a href="#0">View Wallet</a></li> -->
-            <li><a href="#0">Manage Wallet</a></li>
-            <li><a href="#0">Add Credits</a></li>
+            <!-- <li><a href="#0">Manage Wallet</a></li> -->
+            <li><a href="#0" data-toggle="modal" data-target="#myModal">Add Credits</a></li>
           </ul>
         </li>
 
         <li class="has-children tag">
           <a href="#0">Tags</a>
           
-          <ul>
-            <!-- <li><a href="#0">All Tags</a></li> -->
+          <!-- <ul>
+            <li><a href="#0">All Tags</a></li>
             <li><a href="#0">Manage Tags</a></li>
             <li><a href="#0">Import Tag</a></li>
-          </ul>
+          </ul> -->
         </li>
         <li class="has-children cars">
           <a href="#0">Cars</a>
           
-          <ul>
-            <!-- <li><a href="#0">All Cars</a></li> -->
+          <!-- <ul>
+            <li><a href="#0">All Cars</a></li>
             <li><a href="#0">Manage Cars</a></li>
-          </ul>
+          </ul> -->
         </li>
       </ul>
     </nav>
@@ -135,23 +128,144 @@
         <div class="wallet featurette-heading" style="margin-top:5px;">$0.00</div>
       </div>
 
-      <div class="grid-item" style="display:inline-block; margin-top:2em;">
-        <form action="" method="POST">
-          <script
-            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-            data-key="pk_test_5jURqGPxHHyGNcwW5EjL7M6Y"
-            data-amount="2000"
-            data-name="EPM"
-            data-description="Add Credit ($20.00)"
-            data-image="/img/EPM/logo2.png"
-            data-locale="auto">
-          </script>
-        </form>
-          <li id="addCredits" class="action-btn" ><a href="#0" onClick="addCredits()">Add Credits</a></li>
+      <div class="grid-item" style="display:inline-block; margin-top:2em; width: 200px;">
+
+          <!-- <button id="addCredits" class="action-btn" onClick="addCredits()">Add Credits</button> -->
+          
+          <div class="input-group" >
+            <input id type="number" class="creditAdd form-control" aria-label="...">
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Add Credits</button>
+            </div>
+          </div>
       </div>
       
+      <!-- Modal -->
+      <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Payment</h4>
+            </div>
+            <div class="modal-body" style="text-align:left;">
+
+              <fieldset>
+                  <div class="control-group padMe">
+                      <label label-default="" class="control-label">Card Holder's Name</label>
+                      <div class="controls">
+                          <input type="text" class="form-control" pattern="\w+ \w+.*" title="First and last name" required="">
+                      </div>
+                  </div>
+                  <div class="control-group padMe">
+                      <label label-default="" class="control-label">Card Number</label>
+                      <div class="controls">
+                          <div class="row">
+                              <div class="col-md-3">
+                                  <input type="text" class="form-control" autocomplete="off" maxlength="4" pattern="\d{4}" title="First four digits" required="">
+                              </div>
+                              <div class="col-md-3">
+                                  <input type="text" class="form-control" autocomplete="off" maxlength="4" pattern="\d{4}" title="Second four digits" required="">
+                              </div>
+                              <div class="col-md-3">
+                                  <input type="text" class="form-control" autocomplete="off" maxlength="4" pattern="\d{4}" title="Third four digits" required="">
+                              </div>
+                              <div class="col-md-3">
+                                  <input type="text" class="form-control" autocomplete="off" maxlength="4" pattern="\d{4}" title="Fourth four digits" required="">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="control-group padMe">
+                      <label label-default="" class="control-label">Card Expiry Date</label>
+                      <div class="controls">
+                          <div class="row">
+                              <div class="col-md-9">
+                                  <select class="form-control" name="cc_exp_mo">
+                                      <option value="01">January</option>
+                                      <option value="02">February</option>
+                                      <option value="03">March</option>
+                                      <option value="04">April</option>
+                                      <option value="05">May</option>
+                                      <option value="06">June</option>
+                                      <option value="07">July</option>
+                                      <option value="08">August</option>
+                                      <option value="09">September</option>
+                                      <option value="10">October</option>
+                                      <option value="11">November</option>
+                                      <option value="12">December</option>
+                                  </select>
+                              </div>
+                              <div class="col-md-3">
+                                  <select class="form-control" name="cc_exp_yr">
+                                      <option>2015</option>
+                                      <option>2016</option>
+                                      <option>2017</option>
+                                      <option>2018</option>
+                                      <option>2019</option>
+                                      <option>2020</option>
+                                      <option>2021</option>
+                                      <option>2022</option>
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="control-group padMe">
+                      <label label-default="" class="control-label">Card CVV</label>
+                      <div class="controls">
+                          <div class="row">
+                              <div class="col-md-3">
+                                  <input type="text" class="form-control" autocomplete="off" maxlength="3" pattern="\d{3}" title="Three digits at back of your card" required="">
+                              </div>
+                              <div class="col-md-8"></div>
+                          </div>
+                      </div>
+                  </div>
+                  <!-- <div class="control-group padMe">
+                    <label label-default="" class="control-label"></label>
+                    <div class="controls">
+                      <button type="submit" class="btn btn-primary">Submit</button> 
+                      <button type="button" class="btn btn-default">Cancel</button>
+                    </div>
+                  </div> -->
+              </fieldset>
 
 
+            </div>
+            <div class="modal-footer control-group padMe">
+              <button type="submit" class="btn btn-primary" onclick="addCredits()">Submit</button> 
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="table table-responsive table-hover table-striped" style="text-align:left; margin-top:10px;">          
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Credit</th>
+              <th>Debit</th>
+              <th>Balance</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- <tr>
+              <td>1</td>
+              <td>Anna</td>
+              <td>Pitt</td>
+              <td>35</td>
+            </tr> -->
+          </tbody>
+        </table>
+        </div>
+      </div>
 
     </div> <!-- .content-wrapper
 
@@ -167,7 +281,28 @@
 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script type="text/javascript">
+
+    Parse.initialize("2pWww3Mbn2k28ctC8O8G5Gtg4cVebSqXaMwNr0EC", "3db2YW8GZ7LBJqgwybtHhoKgBwmRWsJy4ZeiilcT");
     
+    var currentUser = Parse.User.current();
+    if (currentUser) {
+        // do stuff with the user
+        console.log("Logged IN",currentUser);
+        $('.pageTitle').html(currentUser.attributes.username + "'s Wallet");
+        
+    } else {
+        // show the signup or login page
+        location = "/index.html";
+    }
+
+    function handleParseError(err) {
+      switch (err.code) {
+        case Parse.Error.INVALID_SESSION_TOKEN:
+          Parse.User.logOut();
+          break;
+      }
+    }
+
     var logMeOut = function(event){
       // event.preventDefault();
       Parse.User.logOut();
@@ -175,43 +310,109 @@
       location = "/index.html";
     };
 
-    $(document).ready(function($) {
+    var addCredits = function(event){
+      // event.preventDefault();
+      var toAdd = parseFloat($('.creditAdd').val());
+      console.log("To Add: ", toAdd);
+      console.log("currentUser ", Parse.User.current());
 
-      Parse.initialize("2pWww3Mbn2k28ctC8O8G5Gtg4cVebSqXaMwNr0EC", "3db2YW8GZ7LBJqgwybtHhoKgBwmRWsJy4ZeiilcT");
-    
-      var currentUser = Parse.User.current();
-      if (currentUser) {
-          // do stuff with the user
-          console.log("Logged IN",currentUser);
-          $('.pageTitle').html(currentUser.attributes.username + "'s Wallet");
-          
-      } else {
-          // show the signup or login page
-          location = "/index.html";
-      }
+      var myWallet = Parse.Object.extend("Wallet");
+      var query = new Parse.Query(myWallet);
+      query.equalTo("userID",Parse.User.current());
+      query.first({
+        success: function(object) {
+          // Successfully retrieved the object.
+          console.log("The Wallet ", object);
+          var newAmount = (object.get('credits') + toAdd);
+          console.log("newAmount ", newAmount);
+          // object.set("credits", newAmount);
+          object.save({
+            credits:newAmount
+          }, {
+            success: function(wallet) {
+              // alert("New Credit: ", wallet.get('credits'));
+              $('.walletCount').html("Wallet $"+ (wallet.get('credits')).toFixed(2));
+              $('.wallet').html("$"+(wallet.get('credits')).toFixed(2));
+              $('#myModal').modal('hide');
 
-      function handleParseError(err) {
-        switch (err.code) {
-          case Parse.Error.INVALID_SESSION_TOKEN:
-            Parse.User.logOut();
-            break;
+              console.log("toAdd ", toAdd);
+
+              var Transaction = Parse.Object.extend("Transaction");
+              var transaction = new Transaction();
+              transaction.save({
+                walletID: wallet,
+                debit: 0,
+                credit: toAdd, 
+                balance: parseFloat(wallet.get('credits').toFixed(2))
+              }, {
+                success: function(trans) {
+                  addTransaction(trans);
+                }
+              });
+
+              
+            }
+          });
+        },
+        error: function(error) {
+          alert("Error: " + error.code + " " + error.message);
         }
-      }
+      });
+    };
 
-    var myWallet = Parse.Object.extend("Wallet");
-    var walletQuery = new Parse.Query(myWallet);
+    var myWallet;
+    var Wallet = Parse.Object.extend("Wallet");
+    var walletQuery = new Parse.Query(Wallet);
     walletQuery.equalTo("userID",currentUser);
     walletQuery.first().then(function(result){
       console.log("Wallet", result);
+      myWallet = result;
       $('.walletCount').html("Wallet $"+ (result.attributes.credits).toFixed(2));
       $('.wallet').html("$"+(result.attributes.credits).toFixed(2));
+    }).then(function(){
+      var mytrans = Parse.Object.extend("Transaction");
+      var transQuery = new Parse.Query(mytrans);
+      transQuery.equalTo("walletID",myWallet);
+      transQuery.descending("createdAt");
+      transQuery.find({
+        success: function(results) {
+          console.log("Transactions", results);
+          results.forEach(function(trans){
+            addTransaction(trans);
+          });
+        },
+        error: function(error) {
+          alert("Error: " + error.code + " " + error.message);
+        }
+      });
     });
-    
-    
+  
+
+
+
+    var addTransaction = function(transaction) {
+        console.log("addTransaction", transaction);
+        var table = document.getElementById("tableBody");
+        var row = table.insertRow(0);
+        var date = row.insertCell(0);
+        var credit = row.insertCell(1);
+        var debit = row.insertCell(2);
+        var balance = row.insertCell(3);
+        date.innerHTML = transaction.get('createdAt').toDateString();
+        credit.innerHTML = transaction.get('credit');
+        debit.innerHTML = transaction.get('debit');
+        balance.innerHTML = transaction.get('balance');
+        
+        console.log("Transaction Added");
+    }
+
+    $(document).ready(function($) {    
 
       // $('.grid').masonry({
       //   // options...
       //   itemSelector: '.grid-item',
+      //   position:"relative",
+      //   display:"inline-block",
       //   columnWidth: 325,
       // });
 
