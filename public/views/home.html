@@ -67,22 +67,22 @@
       <ul>
         <li class="cd-label">Main</li>
         <li class="has-children overview active">
-          <a href="#0">Overview</a>
-          
+          <a href="/views/home.html">Overview</a>
+          <!-- 
           <ul>
             <li><a href="#0">Current</a></li>
             <li><a href="#0">History</a></li>
             <li><a href="#0">Category</a></li>
-          </ul>
+          </ul> -->
         </li>
         <li class="has-children notifications">
-          <a href="#0">Notifications<span class="notiCount">0</span></a>
+          <a href="#0">Notifications<span class="notiCount"></span></a>
           
-          <ul>
+          <!-- <ul>
             <li><a href="#0">All Notifications</a></li>
-            <!-- <li><a href="#0">Friends</a></li> -->
+            <li><a href="#0">Friends</a></li>
             <li><a href="#0">Other</a></li>
-          </ul>
+          </ul> -->
         </li>
 
         <!-- <li class="has-children comments">
@@ -102,29 +102,29 @@
         <li class="has-children dollar">
           <a href="/views/wallet/manage.html">Wallet</a>
           
-          <ul>
-            <!-- <li><a href="#0">View Wallet</a></li> -->
+          <!-- <ul>
+            <li><a href="#0">View Wallet</a></li>
             <li><a href="/views/wallet/manage.html">Manage Wallet</a></li>
             <li><a href="#0">Add Credits</a></li>
-          </ul>
+          </ul> -->
         </li>
 
         <li class="has-children tag">
           <a href="#0">Tags</a>
           
-          <ul>
-            <!-- <li><a href="#0">All Tags</a></li> -->
+          <!-- <ul>
+            <li><a href="#0">All Tags</a></li>
             <li><a href="#0">Manage Tags</a></li>
             <li><a href="#0">Import Tag</a></li>
-          </ul>
+          </ul> -->
         </li>
         <li class="has-children cars">
           <a href="#0">Cars</a>
-          
+          <!-- 
           <ul>
-            <!-- <li><a href="#0">All Cars</a></li> -->
+            <li><a href="#0">All Cars</a></li>
             <li><a href="#0">Manage Cars</a></li>
-          </ul>
+          </ul> -->
         </li>
       </ul>
 
@@ -136,13 +136,13 @@
 
     <div class="content-wrapper grid" style="text-align:center;">
       <!-- <h1>Responsive Sidebar Navigation</h1> -->
-      <div class="timer grid-item" style="display:inline-block; margin-top:2em;">
+      <div class="timer grid-item" style="display:inline-block; margin-top:2em; position:relative;">
         <div class="clock" style=""></div>
         <div class="days featurette-heading" style="margin-top:5px;"></div>
         <div class="cost featurette-heading" style="margin-top:5px;">$0.00</div>
       </div>
 
-      <div class="grid-item" style="display:inline-block; margin-top:2em;">
+      <div class="grid-item" style="display:inline-block; margin-top:2em; position:relative;">
         <select class="basic">
             <option value="null">Select a Car</option>
         </select>
@@ -233,7 +233,7 @@
     var walletQuery = new Parse.Query(myWallet);
     walletQuery.equalTo("userID",currentUser);
     walletQuery.first().then(function(result){
-      console.log("Wallet", result);
+      // console.log("Wallet", result);
       $('.walletCount').html("Wallet $"+ (result.attributes.credits).toFixed(2));
         
 
@@ -259,19 +259,19 @@
       tagQuery.equalTo("tagID",tagP);
       tagQuery.equalTo("paid",false);
       tagQuery.find().then(function(results){
-        console.log("timeResults", results, tagP);
+        // console.log("timeResults", results, tagP);
         if(results.forEach){
           results.forEach(function(hist){
             // console.log(hist.attributes);
             currentTag = hist;
             var today = new Date();
             if(!hist.attributes.out){
-              console.log("NOT OUT", hist.attributes.in, today);
+              // console.log("NOT OUT", hist.attributes.in, today);
               currentTimer = new Date(today.getTime() - hist.attributes.in.getTime());
               console.log(currentTimer);
               daysPassed = Math.ceil((currentTimer / (1000 * 3600 * 24))-1);
-              console.log("diff Days",daysPassed);
-              console.log("cTime",currentTimer.getHours(),currentTimer.getMinutes(), currentTimer.getSeconds());
+              // console.log("diff Days",daysPassed);
+              // console.log("cTime",currentTimer.getHours(),currentTimer.getMinutes(), currentTimer.getSeconds());
               clock.setTime(currentTimer.getHours()*3600 + currentTimer.getMinutes()*60 + currentTimer.getSeconds());
               clock.start();
 
@@ -279,14 +279,14 @@
           });
         }
       }).then(function(){
-        console.log("THEN!", currentTag);
-        console.log("ParkingID?", currentTag.get("parkingID"));
+        // console.log("THEN!", currentTag);
+        // console.log("ParkingID?", currentTag.get("parkingID"));
         var parkP = {"__type":"Pointer","className":"Tag","objectId":tagID};
         var getRate = Parse.Object.extend("Rate");
         var ratQuery = new Parse.Query(getRate);
         ratQuery.equalTo("parkingID",currentTag.get("parkingID"));
         ratQuery.first().then(function(result){
-          console.log("Rates?",result);
+          // console.log("Rates?",result);
           currentRate = result;
         });
       });
@@ -308,6 +308,12 @@
             stop: function() {
               $('.cost').html("$0.00");
               $('.days').html("");
+              $('.grid').masonry({
+                itemSelector: '.grid-item',
+                position:"relative",
+                display:"inline-block",
+                columnWidth: 325,
+              });
               // $('.cost').tooltip("destroy");
             },
             interval: function() {
@@ -315,7 +321,7 @@
               // console.log("TIME",time);
               var count = time;
               var cost = 0;
-              console.log("passed?",daysPassed);
+              // console.log("passed?",daysPassed);
               if(time && currentRate && currentRate.attributes) {
                 // console.log('interval', time);
                 if(count >= 3600){
@@ -338,6 +344,12 @@
                       }
                     }
                     $('.days').html(daysPassed + " Days");
+                    $('.grid').masonry({
+                      itemSelector: '.grid-item',
+                      position:"relative",
+                      display:"inline-block",
+                      columnWidth: 325,
+                    });
                     // $('.cost').tooltip({title: "Days Overdue: "+daysPassed, container: ".timer"});
                   }
                   $('.cost').html("$"+(cost).toFixed(2));
@@ -348,11 +360,13 @@
           }
       });
 
-      // $('.grid').masonry({
-      //   // options...
-      //   itemSelector: '.grid-item',
-      //   columnWidth: 325,
-      // });
+      $('.grid').masonry({
+        // options...
+        itemSelector: '.grid-item',
+        position:"relative",
+        display:"inline-block",
+        columnWidth: 325,
+      });
 
       $("select").selectOrDie({
         onChange: function() { getTime($(this).val()); }
