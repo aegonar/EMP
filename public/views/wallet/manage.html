@@ -313,8 +313,8 @@
     var addCredits = function(event){
       // event.preventDefault();
       var toAdd = parseFloat($('.creditAdd').val());
-      console.log("To Add: ", toAdd);
-      console.log("currentUser ", Parse.User.current());
+      // console.log("To Add: ", toAdd);
+      // console.log("currentUser ", Parse.User.current());
 
       var myWallet = Parse.Object.extend("Wallet");
       var query = new Parse.Query(myWallet);
@@ -322,9 +322,9 @@
       query.first({
         success: function(object) {
           // Successfully retrieved the object.
-          console.log("The Wallet ", object);
+          // console.log("The Wallet ", object);
           var newAmount = (object.get('credits') + toAdd);
-          console.log("newAmount ", newAmount);
+          // console.log("newAmount ", newAmount);
           // object.set("credits", newAmount);
           object.save({
             credits:newAmount
@@ -334,8 +334,6 @@
               $('.walletCount').html("Wallet $"+ (wallet.get('credits')).toFixed(2));
               $('.wallet').html("$"+(wallet.get('credits')).toFixed(2));
               $('#myModal').modal('hide');
-
-              console.log("toAdd ", toAdd);
 
               var Transaction = Parse.Object.extend("Transaction");
               var transaction = new Transaction();
