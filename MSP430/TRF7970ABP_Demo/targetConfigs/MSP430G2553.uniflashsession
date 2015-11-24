@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><PartNumber id=""><Core name="MSP430"><DebugProperties>&lt;?xml version="1.0" encoding="UTF-8" standalone="no" ?&gt;
+&lt;PropertyValues&gt;
+
+  &lt;property id="VerifyAfterProgramLoad"&gt;
+    &lt;curValue&gt;Full verification&lt;/curValue&gt;
+  &lt;/property&gt;
+
+  &lt;property id="AutoRunToLabelOnRestart"&gt;
+    &lt;curValue&gt;0&lt;/curValue&gt;
+  &lt;/property&gt;
+
+  &lt;property id="GeneralClockControl1"&gt;
+    &lt;curValue&gt;1&lt;/curValue&gt;
+  &lt;/property&gt;
+
+  &lt;property id="GeneralClockControl2"&gt;
+    &lt;curValue&gt;1&lt;/curValue&gt;
+  &lt;/property&gt;
+
+  &lt;property id="GeneralClockControl5"&gt;
+    &lt;curValue&gt;1&lt;/curValue&gt;
+  &lt;/property&gt;
+
+&lt;/PropertyValues&gt;
+</DebugProperties><FilePaths/></Core></PartNumber>
