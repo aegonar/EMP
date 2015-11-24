@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<!--[if lte IE 9 ]> <html class="ie"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html> <!--<![endif]-->
+
+<head>
+<link rel="stylesheet" type="text/css" href="simple_link.css">
+</head>
+
+<body class="in-frame" >
+
+<table border="0"  width="100%" cellpadding="3" cellspacing="0">
+
+<tr>  
+<td class="page-title" >
+	NFC Reader Admin </td>
+<td class = "page-title alert"> __SL_G_S.I </td>	
+</tr>
+
+<form method="POST" name="SimpleLink Configuration" action="profiles_add.html">
+<input type="hidden" name="__SL_P_S.R" value="nfc_demo_config.html"> <!-- Redirect -->
+	
+<tr>
+  <td class = "empty-line" colspan=2></td>
+ </tr>
+ 
+<tr>
+  <td class="frame-title" colspan=2 > 
+     Network Configuration </td>
+</tr>
+
+<tr>
+  <td class = "empty-l-in-box" colspan=2></td>
+</tr>
+
+<tr>
+	<td class="label"> SSID: </td>
+	<td class="user-input"><input type="text" maxlength="32" name="__SL_P_P.A" /> </td>
+</tr>
+ 
+<tr>
+	<td class="label"> Security Type: </td>
+	<td class="user-input"><input type="radio" name="__SL_P_P.B" value="0" checked />Open
+								   <input type="radio" name="__SL_P_P.B" value="1" />WEP
+								   <input type="radio" name="__SL_P_P.B" value="2" />WPA1
+								   <input type="radio" name="__SL_P_P.B" value="3" />WPA2</td>
+</tr>
+
+<tr>
+	<td class="label"> Security Key: </td>
+	<td class="user-input"><input type="text" maxlength="64" name="__SL_P_P.C" />  Hexadecimal digits - any combination of 0-9, a-f and A-F</td>
+</tr>
+
+
+<tr>
+	<td class="label"> Profile Priority: </td>
+	<td class="user-input"><input type="text" maxlength="1" name="__SL_P_P.D" />  Enter a value 0-7 (0 = highest)</td>
+</tr>
+
+
+<tr>
+  <td class="empty-l-in-box" colspan=2></td>
+ </tr>
+
+<tr>
+	<td class="in-a-box" colspan=2  align=center><input type="submit" value="Add"/></td>
+</tr>
+
+<tr>
+  <td class="in-a-box" colspan=2 align=center> The new Profile will take affect only after reset</td>
+ </tr>
+
+<tr>
+  <td class = "empty-l-in-box" colspan=2></td>
+</tr>
+ 
+<tr >
+  <td class = "border-l-top" colspan=2 >
+  </td>
+</tr>
+	 
+</form>
+
+<form method="POST" name="SimpleLink Configuration" action=nfc_demo_config.html">
+<input type="hidden" name="__SL_P_S.R" value=nfc_demo_config.html> <!-- Redirect -->
+
+
+ <tr>
+  <td class="frame-title" colspan=2 > 
+     	Account Settings </td>
+</tr>
+
+
+<tr>
+  <td class = "empty-l-in-box" colspan=2></td>
+ </tr>
+
+
+
+
+ <tr>
+  <td  class="label"> Admin Email Address: </td>
+   <td class="user-input"><input type="text"  maxlength="30" name="__SL_P_AEA" value="__SL_G_AEA"/></td>
+</tr>
+<tr>
+  <td  class="label"> Admin Card ID: </td>
+   <td class="user-input"><input type="text" maxlength="30" name="__SL_P_ACI" value="__SL_G_ACI"/></td>
+</tr>
+ <tr>
+  <td  class="label"> Source Email Address: </td>
+   <td class="user-input"><input type="text"  maxlength="30" name="__SL_P_SEA" value="__SL_G_SEA"/></td>
+</tr>
+ <tr>
+  <td  class="label"> Password: </td>
+   <td class="user-input"><input type="text"  maxlength="30" name="__SL_P_SEP" value="__SL_G_SEP"/></td>
+</tr>
+
+
+<form method="POST" name="SimpleLink Configuration" action="mode_config">
+
+<tr >
+  <td class = "border-l-bottom" colspan=2 >
+  </td>
+</tr>
+<tr>
+  <td  class="label"> Device Mode: </td>
+   <td class="user-input"> <select name="__SL_P_STA">
+									<option value="Station" __SL_G_STS >Station</option>
+									<option value="AP"__SL_G_APS >Access Point</option>
+									</select>    </td>
+</tr>
+
+<tr>
+		<td class="in-a-box" colspan=2  align=center><input type="submit" value="Apply" /> </td>
+</tr>
+
+<tr>
+  <td class = "empty-l-in-box" colspan=2></td>
+ </tr>
+ 
+ <tr>
+  <td class = "empty-l-in-box" colspan=2></td>
+ </tr>
+ 
+ <tr >
+  <td class = "border-l-top" colspan=2 >
+  </td>
+</tr>
+</form>
+
+
+ <tr >
+  <td class = "border-l-top" colspan=2 >
+  </td>
+</tr>
+</form>
+
+
+</table>
+</body>
+</html>
