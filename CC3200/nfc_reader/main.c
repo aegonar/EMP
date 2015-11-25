@@ -17,27 +17,15 @@ extern uVectorEntry __vector_table;
 #include <stdio.h>
 #include <string.h>
 #include "hw_types.h"
-
-//#include "types.h"
 #include "hw_ints.h"
 #include "rom.h"
 #include "rom_map.h"
 #include "hw_memmap.h"
 #include "hw_common_reg.h"
 #include "simplelink.h"
-//#include "protocol.h"
-//#ifdef ewarm
-//#include "FreeRTOS.h"
-//#include "task.h"
-//#endif
-
-// free-rtos/TI-rtos include
 #include "osi.h"
-
 #include "interrupt.h"
 #include "pin.h"
-//#include "spi.h"
-//#include "spi_for_trf.h"
 #include "prcm.h"
 #include "pinmux.h"
 #include "gpio_if.h"
@@ -51,19 +39,10 @@ extern uVectorEntry __vector_table;
 #include "timer.h"
 #include "hw_timer.h"
 #include "timer_if.h"
-//#include "trf7970.h"
-//#include "iso15693.h"
-//#include "iso14443a.h"
-//#include "network_if.h"
 #include "common.h"
-//#include "wlan.h"
-
-//#include "trf7970BoosterPack.h"
-//#include "email.h"
 #include "demo_config.h"
 //*****************************************************************************
 #include "LCD.h"
-//	char newLine[16];
 	char line1[16];
 	char line2[16];
 //*****************************************************************************
@@ -77,9 +56,7 @@ short EnteringParking=0;
 short LeavingParking=0;
 short parseRetries=0;
 //*****************************************************************************
-
 #include <stdio.h>
-//#include <string.h>
 #include "jsmn.h"
 //*****************************************************************************
 int TEST_PING=0;
@@ -88,7 +65,6 @@ int Wifi_Error=0;
 #define UartGetCharDev()        MAP_UARTCharGet(DEVICE)
 #define UartPutCharDev(c)       MAP_UARTCharPut(DEVICE,c)
 
-//unsigned long UART_STATUS;
 unsigned short UARTDataFlag=0;
 unsigned char UARTDataBuffer[256];
 unsigned char tagData[256];
@@ -110,7 +86,7 @@ static volatile unsigned long g_ulRefBase;
 static volatile unsigned long g_ulRefTimerInts = 0;
 static volatile unsigned long g_ulIntClearVector;
 unsigned long g_ulTimerInts;
-//int time = 10;
+
 int TimmerBaseFlag=0;
 int TimmerRefFlag=0;
 //*****************************************************************************
@@ -126,9 +102,6 @@ typedef enum{
 	LAN_CONNECTION_FAILED = -0x7D0,
 	INTERNET_CONNECTION_FAILED = LAN_CONNECTION_FAILED - 1,
 	DEVICE_NOT_IN_STATION_MODE = INTERNET_CONNECTION_FAILED - 1,
-
-//    SERVER_GET_TIME_FAILED = -0x7D0,
-//    DNS_LOOPUP_FAILED = SERVER_GET_TIME_FAILED  -1,
 
 	STATUS_CODE_MAX = -0xBB8
 }e_AppStatusCodes;
@@ -195,20 +168,6 @@ short NTPServerError=0;
 #define SERVER_RESPONSE_TIMEOUT 50
 #define GMT_DIFF_TIME_HRS       -4		//timezone
 #define GMT_DIFF_TIME_MINS      0
-//long GMT_DIFF_TIME_HRS=       -4;
-//long GMT_DIFF_TIME_MINS=      0;
-
-//#define SLEEP_TIME              80000000
-//#define OSI_STACK_SIZE          2048
-
-// Application specific status/error codes
-//typedef enum{
-//    // Choosing -0x7D0 to avoid overlap w/ host-driver's error codes
-//    SERVER_GET_TIME_FAILED = -0x7D0,
-//    DNS_LOOPUP_FAILED = SERVER_GET_TIME_FAILED  -1,
-//
-//    STATUS_CODE_MAX = -0xBB8
-//}e_AppStatusCodes;
 
 unsigned short g_usTimerInts;
 SlSecParams_t SecurityParams = {0};
@@ -313,7 +272,6 @@ long GetSNTPTime(long ucGmtDiffHr, long ucGmtDiffMins)
     {
         // could not send SNTP request
     	Report("SERVER_GET_TIME_FAILED");
-//        ASSERT_ON_ERROR(SERVER_GET_TIME_FAILED);
     }
 
     //
@@ -487,7 +445,6 @@ const char * GetDate(void){
 
 	_i8 configLen = sizeof(SlDateTime_t);
 	_i8 configOpt = SL_DEVICE_GENERAL_CONFIGURATION_DATE_TIME;
-	//sl_DevGet(SL_DEVICE_GENERAL_CONFIGURATION,&configOpt, &configLen,(_u8 *)(&dateTime));
 	sl_DevGet((_u8)SL_DEVICE_GENERAL_CONFIGURATION,(_u8 *)&configOpt, (_u8 *)&configLen,(_u8 *)(&dateTime));
 
     NTP_YEAR=dateTime.sl_tm_year;
@@ -514,7 +471,6 @@ const char * GetTime(void){
 
 	_i8 configLen = sizeof(SlDateTime_t);
 	_i8 configOpt = SL_DEVICE_GENERAL_CONFIGURATION_DATE_TIME;
-	//sl_DevGet(SL_DEVICE_GENERAL_CONFIGURATION,&configOpt, &configLen,(_u8 *)(&dateTime));
 	sl_DevGet((_u8)SL_DEVICE_GENERAL_CONFIGURATION,(_u8 *)&configOpt, (_u8 *)&configLen,(_u8 *)(&dateTime));
 
 
@@ -545,8 +501,6 @@ ConfigData_t g_ConfigData =
 		INIT_ROLE
 };
 
-
-
 //===============================================================
 /********** GLOBAL VARIABLES Application              **********/
 //===============================================================
@@ -554,30 +508,6 @@ unsigned char g_reset = 0; // 1- when SW3 is pushed, used as indication for flus
 unsigned char g_init = 1; // innitially set to 1 indicating that configuration has to be read from serial flash
 unsigned int  g_uiNFCAppState = INIT;
 
-//===============================================================
-/********** GLOBAL VARIABLES TRF7970A **********/
-//===============================================================
-/*
-u08_t buf[300];					// TX/RX BUFFER FOR TRF7970A
-u08_t g_uid[300] = "none";		// used for coping card ID
-char g_tag_content[600]; 		// used for saving a content of TAG buffer
-char g_block_content[200];      // used for saving a content of single/multiple block(s)
-
-u08_t g_rssi[10];
-u08_t g_tag_found = 0;          // 0->no tag found
-								// 1- ISO15693 tag found
-								// 2- ISO14443A tag found
-								// 8 - MASTER
-u08_t Tag_Count;
-u08_t i_reg = 0x01;             // INTERRUPT REGISTER
-u08_t irq_flag = 0x00;
-u08_t rx_error_flag = 0x00;
-s08_t rxtx_state = 1;           // USED FOR TRANSMIT RECEIVE BYTE COUNT
-u08_t host_control_flag = 0;
-u08_t stand_alone_flag = 1;
-
-int g_tag_count;                 // Tag counter
-char g_tag_count_str[10];        // string representation of tag counter	*/
 //===============================================================
 //********** GLOBAL VARIABLES -- SimpleLink *********************/
 //===============================================================
@@ -594,17 +524,9 @@ unsigned long  	g_ulPingPacketsRecv = 0;
 
 SlSecParams_t g_SecParams={0,0,0};					// defult secure params, no security
 
-//char g_pcEmailmessage[SMTP_BUF_LEN];   				// Email message buffer
 long g_isFileHandle;								// Configuration Record File Handler
 
-
 // HTTP server tokens variables
-
-unsigned char AEA_POST_token[] = "__SL_P_AEA"; // Admin Email Address
-unsigned char AEA_GET_token[]  = "__SL_G_AEA";
-
-unsigned char ACI_POST_token[] = "__SL_P_ACI"; // Admin Card ID
-unsigned char ACI_GET_token[]  = "__SL_G_ACI";
 
 unsigned char STA_POST_token[] = "__SL_P_STA"; // AP/Station mode post token
 unsigned char STS_GET_token[]  = "__SL_G_STS"; // Station Status (selected/not selected) get token
@@ -612,54 +534,32 @@ unsigned char APS_GET_token[]  = "__SL_G_APS"; // AP mode status (selected/not s
 const char SELECTED[] 		= "selected";
 const char NOT_SELECTED[] 	= "not_selected";
 
-unsigned char SEP_GET_token[]   = "__SL_G_SEP"; // Gmail Source Email Password
-unsigned char SEP_POST_token[]  = "__SL_P_SEP";
-
-unsigned char FUN_GET_token[]  = "__SL_G_FUN"; // First user name
-unsigned char SUN_GET_token[]  = "__SL_G_SUN"; // Second user name
-unsigned char COM_GET_token[]  = "__SL_G_CMP"; // Company name
-unsigned char TEL_GET_token[]  = "__SL_G_TEL"; // Telephone
-
-
 unsigned char FUN_POST_token[]  = "__SL_P_FUN";
 unsigned char SUN_POST_token[]  = "__SL_P_SUN";
 unsigned char COM_POST_token[]  = "__SL_P_CMP";
 unsigned char TEL_POST_token[]  = "__SL_P_TEL";
 
-
-unsigned char SEA_POST_token[] = "__SL_P_SEA"; // Source gmail address
-unsigned char DEA_POST_token[] = "__SL_P_DEA"; // Destination email address
 unsigned char SND_POST_token[] = "__SL_P_SND"; // Reader state (on/off)
 unsigned char SEA_GET_token[]  = "__SL_G_SEA";
 unsigned char DEA_GET_token[]  = "__SL_G_DEA";
-
-unsigned char CCN_GET_token[]  = "__SL_G_CCN"; // Card count
-unsigned char CCN_POST_token[]  = "__SL_P_CCN"; // Card count
-
-unsigned char CCI_GET_token[]  = "__SL_G_CCI"; // Tag ID
-unsigned char CCI_POST_token[]  = "__SL_P_CCI"; // Tag ID
 
 
 //****************************************************************************
 //                      LOCAL FUNCTION PROTOTYPES
 //****************************************************************************
 static void BoardInit(void);
-//void EmailHandleERROR(long error, char * servermessage);
+
 void DisplayBanner(char * AppName);
-//void A2CNTIntHandler (void);
 void GPIOs2IntHandler(void);
 void GPIOs3IntHandler(void);
 
 void ISR_SENSORS(void);
 
-//static void UARTInit(void);
-//static void SPIInit(void);
 long Network_IF_GetHostIP( char* pcHostName,unsigned long * pDestinationIP );
 static int PingTest(unsigned long ulIpAddr);
 long ManageConfigData(unsigned char Mode);
 int ConfigureMode(int iMode);
-//void EmailHandleERROR(long error, char * servermessage);
-//long SendEmail(unsigned char iso);
+
 void ElectronicParkingMeter ( void *pvParameters );
 
 
@@ -866,8 +766,6 @@ void SimpleLinkGeneralEventHandler(SlDeviceEvent_t *pDevEvent)
 			pDevEvent->EventData.deviceEvent.sender);
 }
 
-
-
 //*****************************************************************************
 //
 //! This function handles socket events indication
@@ -910,11 +808,6 @@ void SimpleLinkSockEventHandler(SlSockEvent_t *pSock)
 	}
 }
 
-
-
-
-
-
 //*****************************************************************************
 //
 //! This function gets triggered when HTTP Server receives Application
@@ -939,56 +832,7 @@ void sl_HttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent, SlHttpServer
 
 		pSlHttpServerResponse->ResponseData.token_value.len = 0;
 
-//		if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, SEP_GET_token, strlen((const char *)SEP_GET_token)) == 0)
-//		{
-//			strcpy ((char *) pSlHttpServerResponse->ResponseData.token_value.data,  g_ConfigData.Password);
-//			strLenVal = strlen((const char*) g_ConfigData.Password);
-//			pSlHttpServerResponse->ResponseData.token_value.len += strLenVal;
-//
-//		}
-//		if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, SEA_GET_token, strlen((const char *)SEA_GET_token)) == 0)
-//		{
-//			strcpy ((char*)pSlHttpServerResponse->ResponseData.token_value.data, g_ConfigData.SrcEmailAddress);
-//			strLenVal = strlen((const char*)g_ConfigData.SrcEmailAddress);
-//			pSlHttpServerResponse->ResponseData.token_value.len += strLenVal;
-//
-//		}
-//		if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, DEA_GET_token, strlen((const char *)DEA_GET_token)) == 0)
-//		{
-//			strcpy ((char*)pSlHttpServerResponse->ResponseData.token_value.data, g_ConfigData.DestEmailAddress);
-//			strLenVal = strlen((const char*)g_ConfigData.DestEmailAddress);
-//			pSlHttpServerResponse->ResponseData.token_value.len += strLenVal;
-//
-//		}
-//		if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, AEA_GET_token, strlen((const char *)AEA_GET_token)) == 0)
-//		{
-//			strcpy ((char*)pSlHttpServerResponse->ResponseData.token_value.data, g_ConfigData.DestEmailAddress);
-//			strLenVal = strlen((const char*)g_ConfigData.DestEmailAddress);
-//			pSlHttpServerResponse->ResponseData.token_value.len += strLenVal;
-//
-//		}
-//		if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, ACI_GET_token, strlen((const char *)ACI_GET_token)) == 0)
-//		{
-//			strcpy ((char*)pSlHttpServerResponse->ResponseData.token_value.data, g_ConfigData.CardID);
-//			strLenVal = strlen((const char*)g_ConfigData.CardID);
-//			pSlHttpServerResponse->ResponseData.token_value.len += strLenVal;
-//
-//		}
-//		if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, CCI_GET_token, strlen((const char *)CCI_GET_token)) == 0)
-//		{
-//			strcpy ((char*)pSlHttpServerResponse->ResponseData.token_value.data, (char*) g_uid);
-//			strLenVal = strlen((const char*)g_uid);
-//			pSlHttpServerResponse->ResponseData.token_value.len += strLenVal;
-//
-//		}
-//		if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, CCN_GET_token, strlen((const char *)CCN_GET_token)) == 0)
-//		{
-//			sprintf(g_tag_count_str, "%d", g_tag_count);
-//			strcpy ((char*)pSlHttpServerResponse->ResponseData.token_value.data, g_tag_count_str);
-//			strLenVal = strlen((const char*)g_tag_count_str);
-//			pSlHttpServerResponse->ResponseData.token_value.len += strLenVal;
-//
-//		}
+
 		if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, STS_GET_token, strlen((const char *)STS_GET_token)) == 0)
 		{
 			if (g_ConfigData.Role) {
@@ -1021,46 +865,7 @@ void sl_HttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent, SlHttpServer
 	{
 
 		unsigned char *ptr = pSlHttpServerEvent->EventData.httpPostData.token_name.data;
-//		unsigned char len;
 
-
-//		if(memcmp(ptr, SEP_POST_token, strlen((const char *)SEP_POST_token)) == 0)
-//		{
-//			ptr = pSlHttpServerEvent->EventData.httpPostData.token_value.data;
-//			len = pSlHttpServerEvent->EventData.httpPostData.token_value.len;
-//			memcpy ((char *) g_ConfigData.Password, (const char *) ptr, len);
-//			g_ConfigData.Password[len]= '\0';
-//		}
-//		if(memcmp(ptr, SEA_POST_token, strlen((const char *)SEA_POST_token)) == 0)
-//		{
-//			ptr = pSlHttpServerEvent->EventData.httpPostData.token_value.data;
-//			len = pSlHttpServerEvent->EventData.httpPostData.token_value.len;
-//			strncpy (g_ConfigData.SrcEmailAddress, (const char *) ptr, len);
-//			g_ConfigData.SrcEmailAddress[len]= '\0';
-//		}
-//		if(memcmp(ptr, DEA_POST_token, strlen((const char *)DEA_POST_token)) == 0)
-//		{
-//			ptr = pSlHttpServerEvent->EventData.httpPostData.token_value.data;
-//			len = pSlHttpServerEvent->EventData.httpPostData.token_value.len;
-//			strncpy (g_ConfigData.DestEmailAddress, (const char *) ptr, len);
-//			g_ConfigData.DestEmailAddress[len]= '\0';
-//		}
-//		if(memcmp(ptr, AEA_POST_token, strlen((const char *)AEA_POST_token)) == 0)
-//		{
-//			ptr = pSlHttpServerEvent->EventData.httpPostData.token_value.data;
-//			len = pSlHttpServerEvent->EventData.httpPostData.token_value.len;
-//			strncpy (g_ConfigData.DestEmailAddress, (const char *) ptr,len);
-//			g_ConfigData.DestEmailAddress[len]= '\0';
-//
-//		}
-//		if(memcmp(ptr, ACI_POST_token, strlen((const char *)ACI_POST_token)) == 0)
-//		{
-//			ptr = pSlHttpServerEvent->EventData.httpPostData.token_value.data;
-//			len = pSlHttpServerEvent->EventData.httpPostData.token_value.len;
-//			strncpy (g_ConfigData.CardID, (const char *) ptr,len);
-//			g_ConfigData.CardID[len]= '\0';
-//
-//		}
 		if(memcmp(ptr, STA_POST_token, strlen((const char *)STA_POST_token)) == 0)
 		{
 			ptr = pSlHttpServerEvent->EventData.httpPostData.token_value.data;
@@ -1081,45 +886,10 @@ void sl_HttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent, SlHttpServer
 	}
 }
 
-
-
-
 //*****************************************************************************
 // SimpleLink Asynchronous Event Handlers -- End
 //*****************************************************************************
 
-
-//*****************************************************************************
-//
-//! This function gets triggered when A2CNT interrupt occures
-//!
-//! \param none
-//!
-//! \return None
-//!
-//*****************************************************************************
-/*
-void A2CNTIntHandler (void){
-	u08_t irq_status[4];
-	TimerIntClear(TIMERA2_BASE, TIMER_A); // STOP_COUNTER;
-
-	irq_flag = 0x02;
-
-	Trf7970ReadIrqStatus(irq_status);
-
-	*irq_status = *irq_status & 0xF7;                // set the parity flag to 0
-
-	if(*irq_status == 0x00 || *irq_status == 0x80)
-	{
-		i_reg = 0x00;                                // timer interrupt
-	}
-	else
-	{
-		i_reg = 0x01;
-	}
-
-}
-*/
 //*****************************************************************************
 //
 //! GPIO Interrupt Handler for S3 button
@@ -1136,7 +906,6 @@ void ISR_SENSORS(void)
 
 	//PIN_58
 	if(GPIOPinRead(GPIOA0_BASE, 0x8) == 0x8){
-	   //UART_PRINT("Sensor 1 ISR\n\r");
 
 	    Sensor1=1;
 
@@ -1147,7 +916,6 @@ void ISR_SENSORS(void)
 
 	//PIN_59
 	if(GPIOPinRead(GPIOA0_BASE, 0x10) == 0x10){
-		//UART_PRINT("Sensor 2 ISR\n\r");
 
 		Sensor2=1;
 
@@ -1161,25 +929,6 @@ void ISR_SENSORS(void)
 
 void GPIOs3IntHandler(void)
 {
-//
-//	// GPIO 13
-//	unsigned long ulPinState =  GPIOIntStatus(GPIOA1_BASE,1);
-//
-//	if(ulPinState & GPIO_PIN_4)
-//	{
-//		Button_IF_DisableInterrupt(SW3);
-//		//do stuff here
-//			g_ConfigData.Role = 0;
-//			UART_PRINT("Maintenance mode enabled\n\r");
-//			g_uiNFCAppState = CONNECT_ap;
-//		//go to AP mode
-//		Button_IF_EnableInterrupt(SW3);
-//	}
-//}
-//
-//
-//void ISR_SW3()
-//{
 
 	MAP_GPIOIntClear(GPIOA1_BASE, 0x20);
 
@@ -1187,14 +936,12 @@ void GPIOs3IntHandler(void)
 		Button_IF_DisableInterrupt(SW3);
 		UtilsDelay(5000);
 
+		Timer_IF_Stop(g_ulRefBase, TIMER_A);
+
 		UART_PRINT("Maintenance mode enabled\n\r");
 
 		UART_PRINT("Starting AP\n\r");
 
-//		long lRetVal = ConfigureMode(ROLE_AP);
-//		if (lRetVal == 2) {
-//			g_uiNFCAppState= NFC_READER_OFF_ap;
-//		}
 		g_ConfigData.Role = 0;
 		g_uiNFCAppState = CONNECT_ap;
 
@@ -1203,11 +950,7 @@ void GPIOs3IntHandler(void)
 		writeLines(line1, line2);
 
 		Button_IF_EnableInterrupt(SW3);
-//		g_reset = 1;
-//		//g_ConfigData.Role = 0;
-//		g_ConfigData.Role = 0;
 
-		//g_uiNFCAppState = CONNECT_ap;
 	}
 
 }
@@ -1225,12 +968,8 @@ void GPIOs2IntHandler(void)
 //*****************************************************************************
 //NFC Reader INT
 
-	//void ISR_A2()
-	//{
 	if(GPIOPinRead(GPIOA2_BASE, 0x1) == 0x1){
-		//IntMasterDisable();
 
-	    //MAP_GPIOIntClear(GPIOA2_BASE, 0x1);		//PIN_07
 	    UART_PRINT("P07 ISR in\n\r");
 
 	    if(TAGEnable){
@@ -1247,9 +986,6 @@ void GPIOs2IntHandler(void)
 					UARTDataCount++;
 				}
 
-	//	    	if(UARTDataCount > 16)
-	//	    		UARTDataCount=0;
-
 			}
 
 			if(UARTDataCount != 16){
@@ -1260,17 +996,13 @@ void GPIOs2IntHandler(void)
 				UARTError=1;
 				UARTDataFlag=0;
 
-				//MAP_GPIOIntClear(GPIOA2_BASE, 0x1);		//PIN_07
 			}else{
 				UART_PRINT("UART1 Buffer full.\n\r");
-			//Report("Data: %s\n\r", UARTDataBuffer);
+
 				UARTDataFlag=1;
 				UARTError=0;
 			}
-		   // UARTDataCount=0;
 
-			//IntMasterEnable();
-			//Timer_IF_Start(g_ulRefBase, TIMER_A, 1000);
 	    }else{
 	    	UART_PRINT("UART1 Data ignored.\n\r");
 	    }
@@ -1281,36 +1013,17 @@ void GPIOs2IntHandler(void)
 	    UART_PRINT("P07 ISR out\n\r");
 	}
 
-	    /*
-		if(GPIOPinRead(GPIOA2_BASE, 0x1) == 0x1){
-			UART_PRINT("ISR P07 1\n\r");
-			MAP_UtilsDelay(400000);
-		} else	if(GPIOPinRead(GPIOA2_BASE, 0x1) == 0){
-			UART_PRINT("ISR P07 0\n\r");
-			MAP_UtilsDelay(400000);
-		}
-		*/
-	//}
+
 //*****************************************************************************
 //SW2 Button
-
-//	    unsigned long ulPinState =  GPIOIntStatus(GPIOA2_BASE,1);
-//
-//	    	if(ulPinState & GPIO_PIN_6)
-//	    	{
-//	    		Button_IF_DisableInterrupt(SW2);
-//	    		g_reset = 1;
-//	    		g_ConfigData.Role = 0;
-//
-//	    		Button_IF_EnableInterrupt(SW2);
-//
-//	    	}
 
 		MAP_GPIOIntClear(GPIOA2_BASE, 0x40);
 
 		if( GPIOPinRead(GPIOA2_BASE, 0x40) == 0x40){
 				Button_IF_DisableInterrupt(SW2);
 				UtilsDelay(5000);
+
+				Timer_IF_Stop(g_ulRefBase, TIMER_A);
 
 				UART_PRINT("Dumping config!\n\r");
 
@@ -1324,7 +1037,6 @@ void GPIOs2IntHandler(void)
 
 				Button_IF_EnableInterrupt(SW2);
 		}
-
 
 }
 
@@ -1361,68 +1073,6 @@ BoardInit(void)
 	PRCMCC3200MCUInit();
 }
 
-
-//****************************************************************************
-//
-//! Confgiures the UART module
-//!
-//! \param none
-//!
-//! This function
-//!    Configurates UART
-//!
-//! \return none.
-//
-//****************************************************************************
-/*
-static void UARTInit(void)
-{
-	// UART PRCM settings
-	MAP_PRCMPeripheralReset(PRCM_UARTA0);
-
-	//UART Initialization
-	MAP_UARTConfigSetExpClk(CONSOLE,MAP_PRCMPeripheralClockGet(CONSOLE_PERIPH),
-			UART_BAUD_RATE,(UART_CONFIG_WLEN_8 |
-					UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
-
-	ClearTerm();
-
-}
-*/
-//****************************************************************************
-//
-//! Confgiures the SPI module
-//!
-//! \param none
-//!
-//! This function
-//!    Configurates SPI
-//!
-//! \return none.
-//
-//****************************************************************************
-/*
-static void SPIInit(void)
-{
-	MAP_PRCMPeripheralClkEnable(PRCM_GSPI,PRCM_RUN_MODE_CLK);
-	MAP_PRCMPeripheralReset(PRCM_GSPI);
-	MAP_SPIReset(GSPI_BASE);
-
-	MAP_SPIConfigSetExpClk(GSPI_BASE,MAP_PRCMPeripheralClockGet(PRCM_GSPI),
-			2000000,SPI_MODE_MASTER,SPI_SUB_MODE_1,
-			(SPI_SW_CTRL_CS |
-					SPI_3PIN_MODE |
-					SPI_TURBO_OFF |
-					SPI_CS_ACTIVELOW |
-					SPI_WL_8));
-
-	//
-	// Enable SPI for communication
-	//
-	MAP_SPIEnable(GSPI_BASE);
-
-}
-*/
 //****************************************************************************
 //
 //! Communicates with DNS server and gets host IP by name
@@ -1567,7 +1217,6 @@ long ManageConfigData(unsigned char Mode)
 
 }
 
-
 //****************************************************************************
 //
 //! Confgiures the mode in which the device will work
@@ -1632,198 +1281,7 @@ int ConfigureMode(int iMode)
 }
 
 //*****************************************************************************
-//
-//!	EmailHandleERROR
-//!
-//! @brief  Performs Error Handling for SMTP State Machine
-//!
-//! @param  servermessage is the response buffer from the smtp server
-//!
-//! @return none
-//
-//*****************************************************************************
-/*
-void EmailHandleERROR(long error, char * servermessage)
-{
-	// Errors are handled via flags set in the smtpStateMachine
-	switch(error)
-	{
-	case SL_EMAIL_ERROR_INIT:
-		// Server connection could not be established
-		Report((char*)"Server connection error.\r\n");
-		break;
-	case SL_EMAIL_ERROR_HELO:
-		// Server did not accept the HELO command from server
-		Report((char*)"Server did not accept HELO:\r\n");
-		Report((char*)servermessage);
-		break;
-	case SL_EMAIL_ERROR_AUTH:
-		// Server did not accept authorization credentials
-		Report((char*)"Authorization unsuccessful, check username/password.\r\n");
-		Report((char*)servermessage);
-		break;
-	case SL_EMAIL_ERROR_FROM:
-		// Server did not accept source email.
-		Report((char*)"Email of sender not accepted by server.\r\n");
-		Report((char*)servermessage);
-		break;
-	case SL_EMAIL_ERROR_RCPT:
-		// Server did not accept destination email
-		Report((char*)"Email of recipient not accepted by server.\r\n");
-		Report((char*)servermessage);
-		break;
-	case SL_EMAIL_ERROR_DATA:
-		// 'DATA' command to server was unsuccessful
-		Report((char*)"smtp 'DATA' command not accepted by server.\r\n");
-		Report((char*)servermessage);
-		break;
-	case SL_EMAIL_ERROR_MESSAGE:
-		// Message body could not be sent to server
-		Report((char*)"Email Message was not accepted by the server.\r\n");
-		Report((char*)servermessage);
-		break;
-	case SL_EMAIL_ERROR_QUIT:
-		// Message could not be finalized
-		Report((char*)"Connection could not be properly closed. Message not sent.\r\n");
-		Report((char*)servermessage);
-		break;
-	default:
-		break;
-	}
-	Report("\r\n");
-}
-*/
-//*****************************************************************************
-//
-//!	SendEmail
-//!
-//! @brief  Build email subject and body, calls for email set and send functions
-//!
-//! @param  tag_type - iso tag name (ISO15693 or ISO14443A). Code MASTER is used to indicate that special master tag was detected
-//!
-//! @return status. status = 0 on success
-//
-//*****************************************************************************
-/*
-
-long SendEmail(unsigned char tag_type)
-{
-	long lRetCode;
-	char EmailSubject[60];
-	char TagType[20];
-	SlNetAppServerError_t sEmailErrorInfo;
-
-	SlNetAppEmailSubject_t emailSubject;
-	SlNetAppDestination_t destEmailAdd;
-	SlNetAppSourceEmail_t sourceEmailId;
-	SlNetAppSourcePassword_t sourceEmailPwd;
-
-	switch(tag_type)
-	{
-	case MASTER:
-		sprintf(TagType, "Master");
-		break;
-
-	case ISO15693:
-		sprintf(TagType, "ISO15693");
-		break;
-
-	case ISO14443A:
-		sprintf(TagType, "ISO14443A");
-		break;
-
-	default:
-		sprintf(TagType, "Unknown");
-		break;
-
-	}
-
-	sprintf(EmailSubject, "%s Tag Detected", TagType);
-
-	UART_PRINT("\n\r%s\n\r", EmailSubject);
-	//UART_PRINT("Scanned NFC Tag ID: %s\n\n\r", g_uid);
-
-	//Set Destination Email
-	memcpy(destEmailAdd.Email,g_ConfigData.DestEmailAddress,strlen(g_ConfigData.DestEmailAddress)+1);
-	// Message
-	snprintf(g_pcEmailmessage, sizeof(g_pcEmailmessage), \
-			"CARD INFORMATION\n\n%-30s%40s\n%-30s%40s\n%-30s%s\n%-30s%40d\n\nSimple Link Enables Internet of Things\nTexas Instruments\nhttp://www.ti.com/simplelinkwifi", \
-			"Scanned NFC TAG type:", TagType, \
-			"Scanned NFC Tag ID:", g_uid, \
-			"Scanned NFC Tag’s content:\n\n", g_tag_content, \
-			"Total cards read since last reset:", g_tag_count);
-
-	// Subject
-	memcpy(emailSubject.Value,EmailSubject,strlen(EmailSubject)+1);
-
-	//Set Destination Email
-	memcpy(sourceEmailId.Username,g_ConfigData.SrcEmailAddress,strlen(g_ConfigData.SrcEmailAddress)+1);
-
-	// Email Password
-	memcpy(sourceEmailPwd.Password,g_ConfigData.Password,strlen(g_ConfigData.Password)+1);
-	//    g_email_pass
-
-
-	sl_NetAppEmailSet(SL_NET_APP_EMAIL_ID,NETAPP_DEST_EMAIL,strlen((char *) destEmailAdd.Email)+1,(unsigned char *)&destEmailAdd);
-	//Subject Line
-	sl_NetAppEmailSet(SL_NET_APP_EMAIL_ID,NETAPP_SUBJECT,strlen((char *) emailSubject.Value)+1,(unsigned char *)&emailSubject);
-
-	sl_NetAppEmailSet(SL_NET_APP_EMAIL_ID,NETAPP_SOURCE_EMAIL,strlen((char *) sourceEmailId.Username)+1,(unsigned char*)&sourceEmailId);
-
-	sl_NetAppEmailSet(SL_NET_APP_EMAIL_ID,NETAPP_PASSWORD,strlen((char *) sourceEmailPwd.Password)+1,(unsigned char*)&sourceEmailPwd);
-
-
-	SlNetAppEmailOpt_t eMailServerSetting;
-
-	eMailServerSetting.Ip = g_ulGatewayIP;
-
-
-	eMailServerSetting.Family = AF_INET;
-	eMailServerSetting.Port = GMAIL_HOST_PORT;
-	eMailServerSetting.SecurityMethod = SL_SO_SEC_METHOD_SSLV3;
-	eMailServerSetting.SecurityCypher = SL_SEC_MASK_SSL_RSA_WITH_RC4_128_MD5;
-
-	sl_NetAppEmailSet(SL_NET_APP_EMAIL_ID,NETAPP_ADVANCED_OPT,sizeof(SlNetAppEmailOpt_t),(unsigned char*)&eMailServerSetting);
-
-	// open socket
-
-	int indx = 0;
-	do {
-		lRetCode = sl_NetAppEmailConnect();
-		if (lRetCode) {
-			UART_PRINT("Failed to open socket, return error code: %d \n\r", lRetCode);
-			UART_PRINT("Retrying\n\r");
-			indx ++;
-		}
-
-		if	(indx > 9)
-			return lRetCode;
-
-	} while (lRetCode != 0);
-
-	UART_PRINT("Socket opened succesfully\n\r");
-
-
-	// run smtp fsm
-	lRetCode = sl_NetAppEmailSend(NULL,NULL,g_pcEmailmessage,&sEmailErrorInfo);
-	if (lRetCode == 0) {
-		UART_PRINT("Message has been sent to Gmail server\n\r");
-		UART_PRINT("Source Address       %s\n\r", g_ConfigData.SrcEmailAddress);
-		UART_PRINT("Destination Address  %s\n\r", g_ConfigData.DestEmailAddress);
-		UART_PRINT("Message size         %d characters\n\r", strlen(g_pcEmailmessage));
-	}
-	EmailHandleERROR(lRetCode,(char*)sEmailErrorInfo.Value);
-
-
-	return lRetCode;
-
-	return 0;
-}
-*/
-//*****************************************************************************
-//const char *JSON_STRING =
-//	"{\"user\": \"johndoe\", \"admin\": false, \"uid\": 1000,\n  "
-//	"\"groups\": [\"users\", \"wheel\", \"audio\", \"video\"]}";
+//*JSON_STRING 
 
 static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 	if (tok->type == JSMN_STRING && (int) strlen(s) == tok->end - tok->start &&
@@ -1839,141 +1297,7 @@ void EPM_parseRequestCallback(ParseClient client, int error, int httpStatus, con
     	Report("[parseRequestCallback] Received callback:%s\r\n", httpResponseBody);
 
     	Report("\tParsing JSON\r\n\n");
-/*
-    	char response[256];
 
-
-		char line1[16];
-		char line2[16];
-
-
-
-	    		int i;
-	    		int index;
-	    		int r;
-	    		jsmn_parser p;
-	    		jsmntok_t t[128];
-
-	    		jsmn_init(&p);
-	    		r = jsmn_parse(&p, httpResponseBody, strlen(httpResponseBody), t, sizeof(t)/sizeof(t[0]));
-	    		Report("JSON Tokens: %d\r\n", r-1);
-	    		if (r < 0) {
-	    			Report("Failed to parse JSON: %d\r\n", r);
-	    			//return 1;
-	    		}
-
-	    		// Assume the top-level element is an object
-	    		if (r < 1 || t[0].type != JSMN_OBJECT) {
-	    			Report("Object expected\r\n");
-	    			//return 1;
-	    		}
-
-	    		// Loop over all keys of the root object
-	    		for (index = 1; index < r; index++) {
-	    			i=index;
-	    			//Report("Loop JSON Token index: %d\r\n", i);
-	    			if (jsoneq(httpResponseBody, &t[i], "result") == 0) {
-	    				//Report("result in JSON Token index i: %d\r\n", i);
-	    				//Report("result in JSON Token index index: %d\r\n", index);
-
-//	    				Report("- result: %.*s\r\n", t[i+1].end-t[i+1].start,
-//	    						httpResponseBody + t[i+1].start);
-	    				//strncpy(userName, t[i+1].end-t[i+1].start, httpResponseBody + t[i+1].start);
-	    				strncpy(response, httpResponseBody + t[i+1].start, t[i+1].end-t[i+1].start);
-	    				response[t[i+1].end-t[i+1].start] = '\0';
-	    				//sprintf(userName, "%s", t[i+1].end-t[i+1].start, httpResponseBody + t[i+1].start);		//format string
-	    				Report("JSON KEY: result, JSON VALUE: %s\r\n", response);
-
-
-	    				//here be gates openin'
-
-		    				sprintf(line1, "%-16s", "    Welcome!");		//format string
-		    				//line1[7]=' ';
-		    				sprintf(line2, "%-16s", response);		//format string
-
-		    				Report("\r\n\tValid Card\r\n");
-
-	    				//i++;
-	    				index++;
-	    				//Report("result out JSON Token index i: %d\r\n", i);
-	    				//Report("result out JSON Token index index: %d\r\n", index);
-	    			} else if (jsoneq(httpResponseBody, &t[i], "error") == 0) {
-//	    				Report("erro in JSON Token index i: %d\r\n", i);
-//	    				Report("erro in JSON Token index index: %d\r\n", index);
-
-//	    				Report("- result: %.*s\r\n", t[i+1].end-t[i+1].start,
-//		    						httpResponseBody + t[i+1].start);
-		    				//strncpy(userName, t[i+1].end-t[i+1].start, httpResponseBody + t[i+1].start);
-		    				strncpy(response, httpResponseBody + t[i+1].start, t[i+1].end-t[i+1].start);
-		    				response[t[i+1].end-t[i+1].start] = '\0';
-		    				//sprintf(userName, "%s", t[i+1].end-t[i+1].start, httpResponseBody + t[i+1].start);		//format string
-		    				Report("JSON KEY: error, JSON VALUE: %s\r\n", response);
-
-
-			    				sprintf(line1, "%-16s", "     Error!");		//format string
-			    				//line1[7]=' ';
-			    				sprintf(line2, "%-16s", response);		//format string
-
-			    				Report("\r\n\tInvalid Card\r\n");
-
-	    				//i++;
-	    				index++;
-//	    				Report("error out JSON Token index i: %d\r\n", i);
-//	    				Report("error out JSON Token index index: %d\r\n", index);
-	    			} else if (jsoneq(httpResponseBody, &t[i], "code") == 0) {
-//	    				Report("code in JSON Token index i: %d\r\n", i);
-//	    				Report("code in JSON Token index index: %d\r\n", index);
-
-//	    				Report("- result: %.*s\r\n", t[i+1].end-t[i+1].start,
-//		    						httpResponseBody + t[i+1].start);
-		    				//strncpy(userName, t[i+1].end-t[i+1].start, httpResponseBody + t[i+1].start);
-		    				strncpy(response, httpResponseBody + t[i+1].start, t[i+1].end-t[i+1].start);
-		    				response[t[i+1].end-t[i+1].start] = '\0';
-		    				//sprintf(userName, "%s", t[i+1].end-t[i+1].start, httpResponseBody + t[i+1].start);		//format string
-		    				Report("JSON KEY: code, JSON VALUE: %s\r\n", response);
-
-//
-//			    				sprintf(line1, "%-16s", "Error");		//format string
-//			    				line1[7]=' ';
-//			    				sprintf(line2, "%-16s", response);		//format string
-
-	    				//i++;
-	    				index++;
-//	    				Report("code out JSON Token index i : %d\r\n", i);
-//	    				Report("code out JSON Token index index: %d\r\n", index);
-//	    			} else if (jsoneq(JSON_STRING, &t[i], "groups") == 0) {
-//	    				int j;
-//	    				Report("- Groups:\n");
-//	    				if (t[i+1].type != JSMN_ARRAY) {
-//	    					continue;
-//	    				}
-//	    				for (j = 0; j < t[i+1].size; j++) {
-//	    					jsmntok_t *g = &t[i+j+2];
-//	    					Report("  * %.*s\n", g->end - g->start, JSON_STRING + g->start);
-//	    				}
-//	    				i += t[i+1].size + 1;
-	    			} else {
-//	    				Report("unx in JSON Token index i: %d\r\n", i);
-//	    				Report("unx in JSON Token index index: %d\r\n", index);
-	    				Report("Unexpected JSON KEY -> %.*s\n", t[i].end-t[i].start,
-	    						httpResponseBody + t[i].start);
-	    				strncpy(response, httpResponseBody + t[i].start, t[i].end-t[i].start);
-	    				response[t[i].end-t[i].start] = '\0';
-//int res=atoi(response);
-	    				Report("\r\n\tUndefined JSON Response\r\n");
-
-//	    				sprintf(line1, "%-16s", "Error");		//format string
-//	    				line1[7]=' ';
-//	    				sprintf(line2, "%-16s", "");		//format string
-	    				//i++;
-	    				index++;
-//	    				Report("unx out JSON Token index i: %d\r\n", i);
-//	    				Report("unx out JSON Token index index: %d\r\n", index);
-	    			}
-	    		}
-	    		//return 0;
-
-*/
     	char response[256];
 
     		char line1[16];
@@ -2073,14 +1397,6 @@ void EPM_parseRequestCallback(ParseClient client, int error, int httpStatus, con
 
 			parseSuccess=0;
 
-//			sprintf(line1, "%-16s", "System error.");		//format string
-//			//line1[7]=' ';
-//			sprintf(line2, "%-16s", "Try again?");		//format string
-//			writeLines(line1, line2);
-
-//			g_ConfigData.Role = 1;
-//			g_uiNFCAppState = CONNECT_sta;
-
   }
 }
 //*****************************************************************************
@@ -2097,7 +1413,6 @@ void EPM_parseRequestCallback(ParseClient client, int error, int httpStatus, con
 void ElectronicParkingMeter ( void *pvParameters )
 {
 
-
 	long lRetVal;
 	//int iretvalmDNS,
 	int iTestResult = 0;
@@ -2110,16 +1425,16 @@ void ElectronicParkingMeter ( void *pvParameters )
 		{
 		case INIT:
 		{
-			//g_tag_count = 0;
+
 			g_reset = 0;
-			//TRF_OFF;
+
 			GPIO_Clear(9);
-			//GPIO_Clear(10);
+
 
 
 			if (ManageConfigData(SF_TEST_DATA_RECORD) < 0) // config file doesn't exist in SF
 			{
-//				strncpy((char *) g_uid, INIT_CARD_ID, sizeof(INIT_CARD_ID));
+
 				strncpy(g_ConfigData.DestEmailAddress, DESTINATION_EMAIL_ADDRESS, sizeof(DESTINATION_EMAIL_ADDRESS));
 				strncpy(g_ConfigData.SrcEmailAddress, SOURCE_EMAIL_ADDRESS, sizeof(SOURCE_EMAIL_ADDRESS));
 				strncpy(g_ConfigData.Password, EMAIL_PASSWORD, sizeof(EMAIL_PASSWORD));
@@ -2202,19 +1517,19 @@ void ElectronicParkingMeter ( void *pvParameters )
 				//				osi_Sleep(200);
 			} else if (!IS_IP_LEASED(g_ulStatus)) {
 				//wait util user connects to AP
-				//GPIO_Set(10);
+
 				osi_Sleep(500);
-				//GPIO_Clear(10);
+
 				osi_Sleep(500);
 			} else if (!g_ConfigData.Role) {
 				// wait until user changes role
-				//GPIO_Set(10);
+
 				osi_Sleep(150);
-				//GPIO_Clear(10);
+
 				osi_Sleep(150);
 			} else {
 				g_uiNFCAppState = SAVE_CONFIG;
-				//GPIO_Clear(10);
+
 			}
 			break;
 		}
@@ -2324,21 +1639,6 @@ void ElectronicParkingMeter ( void *pvParameters )
 						SL_IPV4_BYTE(g_ulGatewayIP,1),
 						SL_IPV4_BYTE(g_ulGatewayIP,0));
 
-//			iretvalmDNS = sl_NetAppMDNSRegisterService( (const signed char *) SERVICE_NAME,\
-//					(unsigned char)strlen(SERVICE_NAME),\
-//					(const signed char *) "Service registered for 3200",\
-//					(unsigned char)strlen("Service registered for 3200"),
-//					200,2000,1);
-//
-//
-//			if(iretvalmDNS == 0)
-//			{
-//				Report("MDNS Registration successful\n\r");
-//			}
-//			else
-//			{
-//				Report("MDNS Registration failed\n\r");
-//			}
 				g_uiNFCAppState = SNTP_GET_TIME_sta;
 
 			}
@@ -2382,16 +1682,10 @@ void ElectronicParkingMeter ( void *pvParameters )
 		                        (unsigned char*)&timeVal, sizeof(timeVal));
 		        if(lRetVal < 0)
 		        {
-//		           ERR_PRINT(lRetVal);
-//		           LOOP_FOREVER();
+
 		           NTPServerError=1;
 		        }
 
-		        //while(1)
-		        //{
-		            //
-		            // Get the NTP time and display the time
-		            //
 		            lRetVal = GetSNTPTime(GMT_DIFF_TIME_HRS, GMT_DIFF_TIME_MINS);
 		            if(lRetVal < 0)
 		            {
@@ -2400,11 +1694,6 @@ void ElectronicParkingMeter ( void *pvParameters )
 		                break;
 		            }
 
-		            //
-		            // Wait a while before resuming
-		            //
-		         //   MAP_UtilsDelay(SLEEP_TIME);
-		        //}
 		    }
 		    else
 		    {
@@ -2417,18 +1706,7 @@ void ElectronicParkingMeter ( void *pvParameters )
 		    close(iSocketDesc);
 		    UART_PRINT("Socket closed\n\r");
 
-
-
-
-
 			//****************************************************************************
-
-//		    static short NTP_YEAR=0;
-//		    static short NTP_MONTH=0;
-//		    static short NTP_DAY=0;
-//		    static short NTP_HOUR=0;
-//		    static short NTP_MINUTE=0;
-//		    static short NTP_SECOND=0;
 
 		    SlDateTime_t dateTime;
 		    memset(&dateTime, 0, sizeof(dateTime));
@@ -2443,14 +1721,6 @@ void ElectronicParkingMeter ( void *pvParameters )
 
 		    Report("Time set: [%s]\r\n", GetTime());
 
-//	         _i8 configLen = sizeof(SlDateTime_t);
-//	         _i8 configOpt = SL_DEVICE_GENERAL_CONFIGURATION_DATE_TIME;
-//	         sl_DevGet(SL_DEVICE_GENERAL_CONFIGURATION,&configOpt, &configLen,(_u8 *)(&dateTime));
-//
-//	         Report("Day %d, Month %d, Year %d, Hour %d, Min %d, Sec %d\n",dateTime.sl_tm_day, dateTime.sl_tm_mon, dateTime.sl_tm_year,
-//	                 dateTime.sl_tm_hour, dateTime.sl_tm_min, dateTime.sl_tm_sec);
-
-	         //ReportDate();
 
 		    if(!NTPServerError){
 		    	g_uiNFCAppState = CONNECT_TO_PARSE_sta;
@@ -2465,42 +1735,7 @@ void ElectronicParkingMeter ( void *pvParameters )
 		case CONNECT_TO_PARSE_sta:
 		{
 
-/*
-			int		fail_count = 0;
 
-			do // get host ID
-			{
-				lRetVal = Network_IF_GetHostIP(GMAIL_HOST_NAME, &g_ulGatewayIP);
-				if(iTestResult < 0)
-					UART_PRINT("Get Host IP failed \n\r");
-
-				GPIO_Set(9);
-				osi_Sleep(150);
-				GPIO_Clear(9);
-				osi_Sleep(150);
-
-				fail_count++;
-			}
-			while( (lRetVal < 0) && (fail_count < 101 ) ) ;
-
-#if 1
-			{
-				if (fail_count >= 100) {
-					//IRQ_OFF;
-					//TRF_OFF;
-					GPIO_Clear(9);
-					lRetVal = sl_WlanDisconnect();
-					osi_Sleep(1000);
-
-					g_ConfigData.Role = 0;
-					g_uiNFCAppState = CONNECT_ap;
-
-					UART_PRINT("Failed to connect to Configured AP.. Going back to AP mode!! \n\r");
-					break;
-				}
-			}
-#endif
-*/
 
 			if(TEST_PING){
 
@@ -2533,9 +1768,7 @@ void ElectronicParkingMeter ( void *pvParameters )
 			Report("UART1 Enabled\n\r");
 
 			UART_PRINT("NFC Reader is active and runs scan \n\r");
-		//}
 
-//			sprintf(newLine, "%-16s", " ");		//format string
 			sprintf(line1, "%-16s", " ");		//format string
 			sprintf(line2, "%-16s", " ");		//format string
 
@@ -2611,16 +1844,11 @@ void ElectronicParkingMeter ( void *pvParameters )
 
 			  	ReportDate();
 
-				//char line1[16];
-					sprintf(line1, "%-16s", "   Processing.");		//format string
-				//char line2[16];
-					sprintf(line2, "%-16s", "Checking account");		//format string
+
+				sprintf(line1, "%-16s", "   Processing.");		//format string
+
+				sprintf(line2, "%-16s", "Checking account");		//format string
 				writeLines(line1, line2);
-
-				//tagData[0] = '\0';	//erase tagData String
-
-				//sprintf(tagData, "%-256s", ' ');		//format string
-
 
 				int i=0;
 				for(i=0; i<UARTDataCount; i++){
@@ -2650,10 +1878,10 @@ void ElectronicParkingMeter ( void *pvParameters )
 
 			  	ReportDate();
 
-				//char line1[16];
-					sprintf(line1, "%-16s", "Card read error!");		//format string
-				//char line2[16];
-					sprintf(line2, "%-16s", "   Try Again");		//format string
+
+				sprintf(line1, "%-16s", "Card read error!");		//format string
+
+				sprintf(line2, "%-16s", "   Try Again");		//format string
 				writeLines(line1, line2);
 
 				UARTError=0;
@@ -2667,40 +1895,7 @@ void ElectronicParkingMeter ( void *pvParameters )
 				Timer_IF_Start(g_ulBase, TIMER_A, 30000);
 			}
 
-
-			//my_custom_data[0] = '\0';
-
-			//while(1){
-/*
-				if(UARTDataFlag){
-
-				      UARTDataFlag = 0;
-				      UARTDataCount = 0;
-
-					Report("OUTPUT: %s\n\r", UARTDataBuffer);
-
-					//MessageDev(UARTDataBuffer);
-
-
-					sprintf(newLine, "%-16s", UARTDataBuffer);		//format string
-					sprintf(line1, "%s", line2);		//format string
-					sprintf(line2, "%s", newLine);		//format string
-
-					writeLines(line1, line2);
-
-					g_uiNFCAppState = SEND_PARSE_sta;
-
-					osi_Sleep(5);
-
-				}
-*/
 				break;
-			//}
-
-
-
-			//scan here
-
 
 		}
 		case SEND_PARSE_sta:
@@ -2708,31 +1903,17 @@ void ElectronicParkingMeter ( void *pvParameters )
 			Report("Tag UID: %s\n\r", tagData);
 
 
-			//Parse here
-///*
 
 			sprintf(parseData, "{\"TAG\":\"%s\",\"TIME\":\"%s\",\"GATE\":\"%s\"}", tagData, GetDate(), "FEDCBA0987654321");		//format string
 
-			//Report("client, \"POST\", \"/1/functions/tag\" , %s, NULL\n\r", parseData);
 			Report("client, \"POST\", \"/1/functions/ActiveTest\" , %s, NULL\n\r", parseData);
 
-			//parseSendRequest(client, "POST", "/1/functions/tag", parseData, NULL);
+
 			parseSendRequest(client, "POST", "/1/functions/ActiveTest", parseData, EPM_parseRequestCallback);
 
-//			sprintf(newLine, "%-16s", UARTDataBuffer);		//format string
-//			sprintf(line1, "%s", "Welcome");		//format string
-//			sprintf(line2, "%s", tagData);		//format string
-//
-//			writeLines(line1, line2);
 
 		      UARTDataFlag = 0;
 		      UARTDataCount = 0;
-
-
-
-//			sprintf(line1, "%-16s", "      EPM");		//format string
-//			sprintf(line2, "%-16s", " Tap RFID Card");		//format string
-//			writeLines(line1, line2);
 
 	         ReportDate();
 
@@ -2754,7 +1935,7 @@ void ElectronicParkingMeter ( void *pvParameters )
 					Report("\n\r");
 
 				 if(parseRetries>3){
-						g_uiNFCAppState = NFC_READER_ON_sta;
+
 						parseRetries=0;
 						parseSuccess=0;
 
@@ -2771,11 +1952,12 @@ void ElectronicParkingMeter ( void *pvParameters )
 							Report("\t\t *************************************************\n\r");
 							Report("\n\r");
 
-						Timer_IF_Start(g_ulRefBase, TIMER_A, 1000);
+						g_uiNFCAppState = NFC_READER_ON_sta;
+						Timer_IF_Start(g_ulBase, TIMER_A, 30000);
 				 }
 	         }
 
-//*/
+
 			parseSuccess=0;
 
 		    break;
@@ -2785,8 +1967,6 @@ void ElectronicParkingMeter ( void *pvParameters )
 
 		case HANDLE_PARSE_sta:
 		{
-			//Report("HANDLE_PARSE_sta\n\r");
-	        //ReportDate();
 
 			if(Authorized){
 				if(TimmerBaseFlag){
@@ -2856,31 +2036,7 @@ void ElectronicParkingMeter ( void *pvParameters )
 
 		}
 
-//		case HANDLE_PARSE_sta:
-//		{
-//			Report("HANDLE_PARSE_sta\n\r");
-//	        ReportDate();
-//
-//	        if(TimmerBaseFlag){
-//
-//
-//	        	Timer_IF_Stop(g_ulBase, TIMER_A);
-//	        	TimmerBaseFlag=0;
-//
-//	        	GPIO_IF_LedOff(MCU_ORANGE_LED_GPIO);
-//	        	GPIO_IF_LedOff(MCU_RED_LED_GPIO);
-//
-//				sprintf(line1, "%-16s", "      EPM");		//format string
-//				sprintf(line2, "%-16s", "Enter Parking");		//format string
-//				writeLines(line1, line2);
-//
-//
-//	        	g_uiNFCAppState = NFC_READER_ON_sta;
-//	        }
-//
-//		    break;
-//
-//		}
+
 
 		}
 	}
@@ -2914,64 +2070,7 @@ void TimerRefIntHandler(void)
 
     g_ulRefTimerInts ++;
 }
-//*****************************************************************************
-/*
-void UART1_Handler(){
 
-
-	GPIO_Set(9);
-
-	//Message("UART1 RX INT\n\r");
-
-	IntMasterDisable();
-
-	  UART_STATUS = 0;
-
-	  UART_STATUS = UARTIntStatus(DEVICE, true);
-
-	  MAP_UARTIntClear(DEVICE, UART_INT_RX);
-
-	  if((UART_STATUS & UART_INT_RX) && MAP_UARTCharsAvail(DEVICE))
-
-	  {
-
-	    UARTData = (unsigned char)MAP_UARTCharGetNonBlocking(DEVICE);
-
-	    UARTDataBuffer[UARTDataCount] =  UARTData;
-
-	    UARTDataCount++;
-
-	    if(UARTDataCount >= 16)
-
-	    {
-
-	      UARTDataFlag = 1;
-	      UARTDataCount = 0;
-
-	    }
-
-//	    if(UARTDataCount > 16)
-//
-//	    {
-//
-//	      UARTDataCount = 0x00;
-//
-//	    }
-
-	  }
-
-//	  if(UARTData != '\r' && UARTData != '\n'){
-		  char tmp[32];
-		  sprintf(tmp, "UART1 RX ISR Data: %c\n\r", UARTData);		//format string
-		  Message(tmp);
-//	  }
-
-	  IntMasterEnable();
-	  MAP_UARTIntEnable(DEVICE, UART_INT_RX);            //Interrupt enabled again
-
-	  GPIO_Clear(9);
-}
-*/
 
 //*****************************************************************************
 //							MAIN FUNCTION
@@ -2989,30 +2088,11 @@ void main()
 
 	PinMuxConfig();
 
-	//SPI_CS_ON; // Set spi cs to high
-
-	//UARTInit();
-
-//	DisplayBanner(APP_NAME);
-
-
-	//SPIInit();
-
-	//Initialize Push Botton Switch
-	//Button_IF_Init(MDNSEnableInterruptHandler,FactoryResetInterruptHandler);
-
-	// GPIO interrupt setting
-	// TRF7970 IRQ
-	//GPIOIntInit(GPIOA0_BASE, GPIO_PIN_7, INT_GPIOA0, Trf7970PortB, GPIO_RISING_EDGE, INT_PRIORITY_LVL_1);
 	// SW3
 	GPIOIntInit(GPIOA1_BASE, GPIO_PIN_5, INT_GPIOA1, GPIOs3IntHandler, GPIO_FALLING_EDGE, INT_PRIORITY_LVL_1);
 	// SW2
 	GPIOIntInit(GPIOA2_BASE, GPIO_PIN_6, INT_GPIOA2, GPIOs2IntHandler, GPIO_FALLING_EDGE, INT_PRIORITY_LVL_1);
 
-	//A2CounterInit(A2CNTIntHandler);
-
-	// Set Clock Frequency and Modulation
-	//Trf7970InitialSettings();
 
 	//****************************
 
@@ -3070,23 +2150,19 @@ void main()
 	MAP_GPIOIntRegister(GPIOA0_BASE, ISR_SENSORS);
 
 
-
 //****************************
 
 	initLCD();
 
-//	char newLine[16];
-//		sprintf(newLine, "%-16s", " ");		//format string
+
 	char line1[16];
 		sprintf(line1, "%-16s", "   Electronic");		//format string
 	char line2[16];
 		sprintf(line2, "%-16s", " Parking  Meter");		//format string
 	writeLines(line1, line2);
 
-	//MAP_UARTFIFODisable(DEVICE); //disable fifo
+
 	MAP_UARTFIFOEnable(DEVICE);
-//	MAP_UARTIntRegister(DEVICE, UART1_Handler); //enable interrupts
-//	MAP_UARTIntEnable(DEVICE, UART_INT_RX);
 
 
     //
@@ -3100,48 +2176,11 @@ void main()
 
     DisplayBanner(APP_NAME);
 
-
-	//VStartSimpleLinkSpawnTask(SPAWN_TASK_PRIORITY);
-
-
-
-    	//Message("UART1 Ready\n\r");
-
-/*
-    		sprintf(newLine, "%-16s", " ");		//format string
-
-    		sprintf(line1, "%-16s", " ");		//format string
-
-    		sprintf(line2, "%-16s", " ");		//format string
-
-        while(1){
-
-        	if(UARTDataFlag){
-
-    			UARTDataFlag=0;
-
-    					Report("OUTPUT: %s\n\r", UARTDataBuffer);
-
-    					MessageDev(UARTDataBuffer);
-
-
-    					sprintf(newLine, "%-16s", UARTDataBuffer);		//format string
-    					sprintf(line1, "%s", line2);		//format string
-    					sprintf(line2, "%s", newLine);		//format string
-
-    					writeLines(line1, line2);
-
-    		}
-        }
-
-*/
-
 	//
 	// Start the SimpleLink Host
 	//
 	VStartSimpleLinkSpawnTask(SPAWN_TASK_PRIORITY);
 //****************************
-
 
 	//timer
 
@@ -3170,113 +2209,17 @@ void main()
     Timer_IF_IntSetup(g_ulBase, TIMER_A, TimerBaseIntHandler);
     Timer_IF_IntSetup(g_ulRefBase, TIMER_A, TimerRefIntHandler);
 
-    //
-    // Turn on the timers feeding values in mSec
-    //
-    //Timer_IF_Start(g_ulBase, TIMER_A, 500);
-    //Timer_IF_Start(g_ulRefBase, TIMER_A, 1000);
-
-    //
-    // Loop forever while the timers run.
-    //
-//    while(1)
-//    {
-//    }
 
 
-	//
-	// Start the WlanStationMode task
-	//
-///*
 	osi_TaskCreate(ElectronicParkingMeter,
 			(const signed char*)"Electronic Parking Meter",
 			OSI_STACK_SIZE, NULL, 1, NULL );
 	UART_PRINT("EPM Process started\n\r");
 
-//	osi_TaskCreate( myPushCallback,
-//			(const signed char*)"Push Service",
-//			OSI_STACK_SIZE, NULL, 1, NULL );
-//	UART_PRINT("Push Process started\n\r");
-//*/
-	//osi_TaskCreate(PushButtonHandler, (signed char*)"PushButtonHandler",OSI_STACK_SIZE , NULL, 2, &g_PushButtonTask );
-
 	//
 	// Start the task scheduler
 	//
 	osi_start();
-
-
-
-
-
-
-
-
-
-
-
-//    		int i;
-//    		int r;
-//    		jsmn_parser p;
-//    		jsmntok_t t[128]; /* We expect no more than 128 tokens */
-//
-//    		jsmn_init(&p);
-//    		r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), t, sizeof(t)/sizeof(t[0]));
-//    		if (r < 0) {
-//    			Report("Failed to parse JSON: %d\n", r);
-//    			return 1;
-//    		}
-//
-//    		/* Assume the top-level element is an object */
-//    		if (r < 1 || t[0].type != JSMN_OBJECT) {
-//    			Report("Object expected\n");
-//    			return 1;
-//    		}
-//
-//    		/* Loop over all keys of the root object */
-//    		for (i = 1; i < r; i++) {
-//    			if (jsoneq(JSON_STRING, &t[i], "user") == 0) {
-//    				/* We may use strndup() to fetch string value */
-//    				Report("- User: %.*s\n", t[i+1].end-t[i+1].start,
-//    						JSON_STRING + t[i+1].start);
-//    				i++;
-//    			} else if (jsoneq(JSON_STRING, &t[i], "admin") == 0) {
-//    				/* We may additionally check if the value is either "true" or "false" */
-//    				Report("- Admin: %.*s\n", t[i+1].end-t[i+1].start,
-//    						JSON_STRING + t[i+1].start);
-//    				i++;
-//    			} else if (jsoneq(JSON_STRING, &t[i], "uid") == 0) {
-//    				/* We may want to do strtol() here to get numeric value */
-//    				Report("- UID: %.*s\n", t[i+1].end-t[i+1].start,
-//    						JSON_STRING + t[i+1].start);
-//    				i++;
-//    			} else if (jsoneq(JSON_STRING, &t[i], "groups") == 0) {
-//    				int j;
-//    				Report("- Groups:\n");
-//    				if (t[i+1].type != JSMN_ARRAY) {
-//    					continue; /* We expect groups to be an array of strings */
-//    				}
-//    				for (j = 0; j < t[i+1].size; j++) {
-//    					jsmntok_t *g = &t[i+j+2];
-//    					Report("  * %.*s\n", g->end - g->start, JSON_STRING + g->start);
-//    				}
-//    				i += t[i+1].size + 1;
-//    			} else {
-//    				Report("Unexpected key: %.*s\n", t[i].end-t[i].start,
-//    						JSON_STRING + t[i].start);
-//    			}
-//    		}
-//    		return 0;
-
-
-
-
-
-
-
-
-
-
 
 
 }

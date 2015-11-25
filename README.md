@@ -1,7 +1,7 @@
 # EMP
 Electronic Parking Meter: Micro 2 Project
 
-http://emp.parseapp.com/
+http://epm.parseapp.com/
 
   The focus of this project is to develop a convenient and efficient way to control traffic and manage payment in a parking lot.
 Our system provides the parking management an easy access and payment method by implementing a Radio Frequency Identification 
