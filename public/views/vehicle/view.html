@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/bootstrap.css">  <!-- Bootstrap 3 style -->
+  <link rel="stylesheet" href="/css/carousel.css"> <!-- Carousel style -->
+	<link rel="stylesheet" href="/css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="/css/signup.css"> <!-- Gem SignUp -->
+  <link rel="stylesheet" href="/css/sidebar.css"> <!-- Gem SideBar -->
+  <link rel="stylesheet" href="/css/flipclock.css"> <!-- Gem flipclock -->
+  <link rel="stylesheet" href="/css/selectordie.css"> <!-- Gem selectordie -->
+  <script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+  <script type="text/javascript" src="/js/jquery.litelighter.js"></script>
+  <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+
+  <style type="text/css">
+    .grid-item {
+      margin:0 auto;
+      /*width:325px;*/
+      width:90%;
+    }
+    .padMe {
+      margin: 5px;
+    }
+  </style>
+  	
+	<title>EPM</title>
+</head>
+<body>
+	<header class="cd-main-header">
+    <div id="cd-logo"><a class="navbar-brand" href="/views/home.html" style="font-size:40px; color:white;">{EPM}</a></div>
+    <!-- <a href="#0" class="cd-logo"><img src="img/cd-logo.svg" alt="Logo"></a> -->
+    
+    <!-- cd-search -->
+    <!-- <div class="cd-search is-hidden">
+      <form action="#0">
+        <input type="search" placeholder="Search...">
+      </form>
+    </div>  -->
+
+    <a href="#0" class="cd-nav-trigger"><span></span></a>
+
+    <nav class="cd-nav">
+      <ul class="cd-top-nav">
+        <li><a href="#0" class="walletCount">Wallet</a></li>
+        <!-- <li><a href="#0">Support</a></li> -->
+        <li class="has-children account">
+          <a href="#0">
+            <img src="/img/default-user.png" alt="avatar">
+            Account
+          </a>
+
+          <ul>
+
+            <li><a href="/views/profile/manage.html">My Account</a></li>
+            <li><a href="#0">Edit Account</a></li>
+            <li><a id="logout" onClick="logMeOut()" href="#0">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header> <!-- .cd-main-header -->
+
+  <main class="cd-main-content">
+    <nav class="cd-side-nav">
+      <ul>
+        <li class="cd-label">Main</li>
+        <li class="has-children overview">
+          <a href="/views/home.html">Overview</a>
+          <!-- 
+          <ul>
+            <li><a href="#0">Current</a></li>
+            <li><a href="#0">History</a></li>
+            <li><a href="#0">Category</a></li>
+          </ul> -->
+        </li>
+        <li class="has-children notifications">
+          <a href="#0">Notifications<span class="notiCount"></span></a>
+          
+          <!-- <ul>
+            <li><a href="#0">All Notifications</a></li>
+            <li><a href="#0">Friends</a></li>
+            <li><a href="#0">Other</a></li>
+          </ul> -->
+        </li>
+
+        <!-- <li class="has-children comments">
+          <a href="#0">Comments</a>
+          
+          <ul>
+            <li><a href="#0">All Comments</a></li>
+            <li><a href="#0">Edit Comment</a></li>
+            <li><a href="#0">Delete Comment</a></li>
+          </ul>
+        </li> -->
+      </ul>
+
+      <ul>
+        <li class="cd-label">Secondary</li>
+
+        <li class="has-children dollar">
+          <a href="/views/wallet/manage.html">Wallet</a>
+          
+          <ul>
+            <!-- <li><a href="#0">View Wallet</a></li> -->
+            <li><a href="/views/wallet/manage.html">Manage Wallet</a></li>
+            <!-- <li><a href="#0">Add Credits</a></li> -->
+          </ul>
+        </li>
+
+        <li class="has-children tag">
+          <a href="/views/tag/manage.html">Tags</a>
+          <ul>
+            <li><a href="/views/tag/view.html">View Tag</a></li>
+            <li><a href="/views/tag/manage.html">Manage Tags</a></li>
+          </ul>
+        </li>
+        <li class="has-children cars active">
+          <a href="/views/vehicle/manage.html">Cars</a>
+          <ul>
+            <li><a href="/views/vehicle/view.html">View Vehicle</a></li>
+            <li><a href="/views/vehicle/manage.html">Manage Vehicles</a></li>
+          </ul>
+        </li>
+      </ul>
+
+ <!--      <ul>
+        <li class="cd-label">Action</li>
+        <li id="toggleClock" class="action-btn" ><a href="#0" onClick="toggClock()">Toggle Clock</a></li>
+      </ul> -->
+    </nav>
+
+    <div class="content-wrapper grid" style="text-align:center;">
+
+      <p class="pageTitle featurette-heading" style="margin-top:45px;">View Vehicle</p>
+
+      
+      <div class="grid-item" style="display:inline-block; margin-top:2em; position:relative;">
+        <select class="basic">
+            <option value="null">Select a Vehicle</option>
+        </select>
+      </div>
+
+      <div class="table table-responsive table-hover table-striped" style="text-align:left; margin-top:10px;">          
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Entrance Time</th>
+              <th>Exit Time</th>
+              <th>Paid</th>
+              <th>ParkingID</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- <tr>
+              <td>1</td>
+              <td>Anna</td>
+              <td>Pitt</td>
+              <td>35</td>
+            </tr> -->
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+      
+      
+
+
+
+    </div> <!-- .content-wrapper
+
+    <!-- FOOTER -->
+    <!-- <footer class="content-wrapper">
+      <p class="pull-right"><a href="#">Back to top</a></p>
+      <p>&copy; 2015 EPM, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+    </footer> -->
+
+
+  </main> <!-- .cd-main-content -->
+    </div><!-- /.container -->
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script type="text/javascript">
+    
+    var logMeOut = function(event){
+      // event.preventDefault();
+      Parse.User.logOut();
+      console.log("Logged OUT");
+      location = "/index.html";
+    };
+
+    $(document).ready(function($) {
+
+      Parse.initialize("2pWww3Mbn2k28ctC8O8G5Gtg4cVebSqXaMwNr0EC", "3db2YW8GZ7LBJqgwybtHhoKgBwmRWsJy4ZeiilcT");
+    
+      var currentUser = Parse.User.current();
+      if (currentUser) {
+          // do stuff with the user
+          console.log("Logged IN",currentUser);
+      } else {
+          // show the signup or login page
+          location = "/index.html";
+      }
+
+      function handleParseError(err) {
+        switch (err.code) {
+          case Parse.Error.INVALID_SESSION_TOKEN:
+            Parse.User.logOut();
+            // If web browser, render a log in screen
+            // If Express.js, redirect the user to the log in route
+            break;
+
+          // Other Parse API errors that you want to explicitly handle
+        }
+      }
+
+      var userTags;
+      var userVehicles;
+
+      var getVehicle = Parse.Object.extend("Vehicle");
+      var vehQuery = new Parse.Query(getVehicle);
+      vehQuery.equalTo("userID",currentUser);
+      vehQuery.find({
+        success: function(results) {
+          userVehicles = results;
+        console.log("User Tags", userVehicles);
+        
+        if(userVehicles.forEach){
+            userVehicles.forEach(function(car){
+              console.log("car", car.attributes);
+              var theID = 0;
+              console.log("TE ID", car.attributes.tadID);
+              if(car.attributes && car.attributes.tagID && car.attributes.tagID.id){
+                theID = car.attributes.tagID.id;
+              }
+              $(".basic").append("<option value="+theID+">"+(car.attributes.make && car.attributes.model ? car.attributes.make+" "+ car.attributes.model:(car.attributes.licensePlate))+"</option>");
+              $("select").selectOrDie("update");
+            });
+          }
+        },
+        error: function(error) {
+          alert("Error: " + error.code + " " + error.message);
+        }
+      });
+
+
+    var myWallet = Parse.Object.extend("Wallet");
+    var walletQuery = new Parse.Query(myWallet);
+    walletQuery.equalTo("userID",currentUser);
+    walletQuery.first().then(function(result){
+      // console.log("Wallet", result);
+      $('.walletCount').html("Wallet $"+ (result.attributes.credits).toFixed(2));
+        
+
+    });
+
+
+
+    var currentTag;
+    var getHistory = function(tagID){
+      console.log("GET", tagID);
+      var tagP = {"__type":"Pointer","className":"Tag","objectId":tagID};
+      var getTag = Parse.Object.extend("History");
+      var tagQuery = new Parse.Query(getTag);
+      tagQuery.equalTo("tagID",tagP);
+      tagQuery.find({
+        success: function(results) {
+          console.log("History", results);
+          results.forEach(function(hist){
+            addHistory(hist);
+          });
+        },
+        error: function(error) {
+          alert("Error: " + error.code + " " + error.message);
+        }
+      });
+    };
+    
+    var addHistory = function(history) {
+        console.log("addHistory", history);
+        var table = document.getElementById("tableBody");
+        var row = table.insertRow(0);
+        var date = row.insertCell(0);
+        var credit = row.insertCell(1);
+        var debit = row.insertCell(2);
+        var balance = row.insertCell(3);
+        date.innerHTML = history.get('in').toDateString();
+        if(history.get('out')){
+          credit.innerHTML = history.get('out');
+        }else{
+          credit.innerHTML = "In Parking";
+        }
+        debit.innerHTML = history.get('paid');
+        balance.innerHTML = history.get('parkingID');
+        
+        console.log("Transaction Added");
+    }
+    
+
+      // $('.grid').masonry({
+      //   // options...
+      //   itemSelector: '.grid-item',
+      //   position:"relative",
+      //   display:"inline-block",
+      //   columnWidth: 325,
+      // });
+
+      $("select").selectOrDie({
+        onChange: function() { 
+          $("#tableBody").empty();
+          getHistory($(this).val()); 
+        }
+      });
+
+    });
+
+  </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
+<script type="text/javascript" src="/js/jquery.menu-aim.js"></script>
+<!-- <script type="text/javascript" src="/js/tether.min.js"></script> -->
+<script type="text/javascript" src="/js/selectordie.js"></script>
+<script src="/js/bootstrap.min.js"></script> <!-- Bootstrap -->
+<script src="/js/sidebar.js"></script> <!-- Gem jQuery -->
+</body>
+</html>

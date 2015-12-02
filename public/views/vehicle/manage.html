@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/bootstrap.css">  <!-- Bootstrap 3 style -->
+  <link rel="stylesheet" href="/css/carousel.css"> <!-- Carousel style -->
+	<link rel="stylesheet" href="/css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="/css/signup.css"> <!-- Gem SignUp -->
+  <link rel="stylesheet" href="/css/sidebar.css"> <!-- Gem SideBar -->
+  <link rel="stylesheet" href="/css/flipclock.css"> <!-- Gem flipclock -->
+  <link rel="stylesheet" href="/css/selectordie.css"> <!-- Gem selectordie -->
+  <script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+  <script type="text/javascript" src="/js/jquery.litelighter.js"></script>
+  <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+
+  <style type="text/css">
+    .grid-item {
+      margin:0 auto;
+      /*width:325px;*/
+      width:90%;
+    }
+    .padMe {
+      margin: 5px;
+    }
+  </style>
+  	
+	<title>EPM</title>
+</head>
+<body>
+	<header class="cd-main-header">
+    <div id="cd-logo"><a class="navbar-brand" href="/views/home.html" style="font-size:40px; color:white;">{EPM}</a></div>
+    <!-- <a href="#0" class="cd-logo"><img src="img/cd-logo.svg" alt="Logo"></a> -->
+    
+    <!-- cd-search -->
+    <!-- <div class="cd-search is-hidden">
+      <form action="#0">
+        <input type="search" placeholder="Search...">
+      </form>
+    </div>  -->
+
+    <a href="#0" class="cd-nav-trigger"><span></span></a>
+
+    <nav class="cd-nav">
+      <ul class="cd-top-nav">
+        <li><a href="#0" class="walletCount">Wallet</a></li>
+        <!-- <li><a href="#0">Support</a></li> -->
+        <li class="has-children account">
+          <a href="#0">
+            <img src="/img/default-user.png" alt="avatar">
+            Account
+          </a>
+
+          <ul>
+
+            <li><a href="/views/profile/manage.html">My Account</a></li>
+            <li><a href="#0">Edit Account</a></li>
+            <li><a id="logout" onClick="logMeOut()" href="#0">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header> <!-- .cd-main-header -->
+
+  <main class="cd-main-content">
+    <nav class="cd-side-nav">
+      <ul>
+        <li class="cd-label">Main</li>
+        <li class="has-children overview">
+          <a href="/views/home.html">Overview</a>
+          <!-- 
+          <ul>
+            <li><a href="#0">Current</a></li>
+            <li><a href="#0">History</a></li>
+            <li><a href="#0">Category</a></li>
+          </ul> -->
+        </li>
+        <li class="has-children notifications">
+          <a href="#0">Notifications<span class="notiCount"></span></a>
+          
+          <!-- <ul>
+            <li><a href="#0">All Notifications</a></li>
+            <li><a href="#0">Friends</a></li>
+            <li><a href="#0">Other</a></li>
+          </ul> -->
+        </li>
+
+        <!-- <li class="has-children comments">
+          <a href="#0">Comments</a>
+          
+          <ul>
+            <li><a href="#0">All Comments</a></li>
+            <li><a href="#0">Edit Comment</a></li>
+            <li><a href="#0">Delete Comment</a></li>
+          </ul>
+        </li> -->
+      </ul>
+
+      <ul>
+        <li class="cd-label">Secondary</li>
+
+        <li class="has-children dollar">
+          <a href="/views/wallet/manage.html">Wallet</a>
+          
+          <ul>
+            <!-- <li><a href="#0">View Wallet</a></li> -->
+            <li><a href="/views/wallet/manage.html">Manage Wallet</a></li>
+            <!-- <li><a href="#0">Add Credits</a></li> -->
+          </ul>
+        </li>
+
+        <li class="has-children tag">
+          <a href="/views/tag/manage.html">Tags</a>
+          <ul>
+            <li><a href="/views/tag/view.html">View Tag</a></li>
+            <li><a href="/views/tag/manage.html">Manage Tags</a></li>
+          </ul>
+        </li>
+        <li class="has-children cars active">
+          <a href="/views/vehicle/manage.html">Cars</a>
+          <ul>
+            <li><a href="/views/vehicle/view.html">View Vehicle</a></li>
+            <li><a href="/views/vehicle/manage.html">Manage Vehicles</a></li>
+          </ul>
+        </li>
+      </ul>
+
+ <!--      <ul>
+        <li class="cd-label">Action</li>
+        <li id="toggleClock" class="action-btn" ><a href="#0" onClick="toggClock()">Toggle Clock</a></li>
+      </ul> -->
+    </nav>
+
+    <div class="content-wrapper grid" style="text-align:center;">
+
+      <p class="pageTitle featurette-heading" style="margin-top:45px;">Manage Vehicles</p>
+
+      <div class="grid-item" style="display:inline-block; margin-top:2em; width: 200px;">
+
+          <!-- <button id="addCredits" class="action-btn" onClick="addCredits()">Add Credits</button> -->
+          
+          <div class="input-group" >
+            <!-- <input id type="number" class="creditAdd form-control" aria-label="..."> -->
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Add Vehicle</button>
+            </div>
+          </div>
+
+      </div>
+      
+      <!-- Modal -->
+      <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Add Vehicle</h4>
+            </div>
+            <div class="modal-body" style="text-align:left;">
+
+              <fieldset>
+                <div class="control-group padMe">
+                      
+                      <div class="controls">
+                          <div class="row">
+                              <div class="col-md-6">
+                                <label label-default="" class="control-label">Make</label>
+                                  <input id="vehMake" type="text" class="form-control" autocomplete="off" maxlength="15" pattern="\d{4}" title="Vehicle Make" required="true">
+                              </div>
+                              <div class="col-md-6">
+                                <label label-default="" class="control-label">Model</label>
+                                  <input id="vehModel" type="text" class="form-control" autocomplete="off" maxlength="15" pattern="\d{4}" title="Vehicle Model" required="true">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="control-group padMe">
+                      
+                      <div class="controls">
+                          <div class="row">
+                              <div class="col-md-6">
+                                <label label-default="" class="control-label">Year</label>
+                                  <input id="vehYear" type="number" class="form-control" autocomplete="off" maxlength="4" pattern="\d{4}" title="Vehicle Year" required="true">
+                              </div>
+                              <div class="col-md-6">
+                                <label label-default="" class="control-label">License Plate</label>
+                                  <input id="vehPlate" type="text" class="form-control" autocomplete="off" maxlength="10" pattern="\d{4}" title="Vehicle License Plate" required="true">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="control-group padMe">
+                      <label label-default="" class="control-label">VIN Number</label>
+                      <div class="controls">
+                          <div class="row">
+                              <div class="col-md-12">
+                                  <input id="VIN" type="text" class="form-control" autocomplete="off" maxlength="17" pattern="\d{4}" title="Tag digits" required="true">
+                              </div>
+                              
+                          </div>
+                      </div>
+                  </div>
+                  <div class="control-group padMe">
+                      <label label-default="" class="control-label">Link Tag</label>
+                      <div class="controls">
+                          <div class="row">
+                              <div class="col-md-6">
+                                  <select id="tagCar" class="basic">
+                                      <option value="null">No Tag</option>
+                                  </select>
+                              </div>
+                              
+                          </div>
+                      </div>
+                  </div>
+              </fieldset>
+
+
+            </div>
+            <div class="modal-footer control-group padMe">
+              <button type="submit" class="btn btn-primary" onclick="registerCar()">Submit</button> 
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="table table-responsive table-hover table-striped" style="text-align:left; margin-top:10px;">          
+        <table id="myTable" class="table">
+          <thead>
+            <tr>
+              <th>Make</th>
+              <th>Model</th>
+              <th>Year</th>
+              <th>License Plate</th>
+              <th>VIN</th>
+              <th>Tag</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Table Content -->
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+
+
+    </div> <!-- .content-wrapper
+
+
+
+  </main> <!-- .cd-main-content -->
+    </div><!-- /.container -->
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script type="text/javascript">
+    
+    var logMeOut = function(event){
+      // event.preventDefault();
+      Parse.User.logOut();
+      console.log("Logged OUT");
+      location = "/index.html";
+    };
+
+    var unlinkVehicle = function(ID){
+      var id = ID+"";
+      console.log("unlinkVehicle", id);
+    }
+
+    var linkVehicle = function(){
+      console.log("linkVehicle", id);
+    }
+
+
+      Parse.initialize("2pWww3Mbn2k28ctC8O8G5Gtg4cVebSqXaMwNr0EC", "3db2YW8GZ7LBJqgwybtHhoKgBwmRWsJy4ZeiilcT");
+    
+      var currentUser = Parse.User.current();
+      if (currentUser) {
+          // do stuff with the user
+          console.log("Logged IN",currentUser);
+      } else {
+          // show the signup or login page
+          location = "/index.html";
+      }
+
+      function handleParseError(err) {
+        switch (err.code) {
+          case Parse.Error.INVALID_SESSION_TOKEN:
+            Parse.User.logOut();
+            // If web browser, render a log in screen
+            // If Express.js, redirect the user to the log in route
+            break;
+
+          // Other Parse API errors that you want to explicitly handle
+        }
+      }
+
+      var userTags;
+      var userVehicles;
+
+      var getVehicle = Parse.Object.extend("Vehicle");
+      var vehQuery = new Parse.Query(getVehicle);
+      vehQuery.equalTo("userID",currentUser);
+      vehQuery.find({
+        success: function(results) {
+          console.log("Vehicle", results);
+          userVehicles = (results);
+          if(results.forEach){
+            results.forEach(function(car){
+
+              if(car.get('tagID')){
+
+                var getTag = Parse.Object.extend("Tag");
+                var tagQuery = new Parse.Query(getTag);
+                tagQuery.equalTo("userID",currentUser);
+                tagQuery.first().then(function(result){
+                  addCar(car, result);        
+                });
+
+              }else{
+                addCar(car, false);
+              }
+
+
+            });
+
+          }
+
+        },
+        error: function(error) {
+          alert("Error: " + error.code + " " + error.message);
+        }
+      });
+
+      var getTag = Parse.Object.extend("Tag");
+      var tagQuery = new Parse.Query(getTag);
+      tagQuery.equalTo("userID",currentUser);
+      tagQuery.find({
+        success: function(results) {
+          userTags = (results);
+          console.log("User Tags", userTags);
+          if(results.forEach){
+            results.forEach(function(tag){
+              console.log("NO TAG?",!tag.get('vehicleID'));
+              if(!tag.get('vehicleID')){
+                console.log("TAG NO CAR", tag);
+                $(".basic").append("<option value="+tag.id+">"+(tag.attributes.name ? tag.attributes.name:(tag.attributes.rfidTag))+"</option>");
+                $("select").selectOrDie("update");
+              }
+            });
+          }
+        },
+        error: function(error) {
+          alert("Error: " + error.code + " " + error.message);
+        }
+      });
+
+
+      
+      
+
+
+    var myWallet = Parse.Object.extend("Wallet");
+    var walletQuery = new Parse.Query(myWallet);
+    walletQuery.equalTo("userID",currentUser);
+    walletQuery.first().then(function(result){
+      // console.log("Wallet", result);
+      $('.walletCount').html("Wallet $"+ (result.attributes.credits).toFixed(2));
+    });
+
+    var addCar = function(Item, tag) {
+        console.log("addItem", Item, tag);
+        var table = document.getElementById("tableBody");
+        var row = table.insertRow(0);
+        var col1 = row.insertCell(0);
+        var col2 = row.insertCell(1);
+        var col3 = row.insertCell(2);
+        var col4 = row.insertCell(3);
+        var col5 = row.insertCell(4);
+        var col6 = row.insertCell(5);
+        var col7 = row.insertCell(6);
+        col1.innerHTML = Item.get('make');
+        col2.innerHTML = Item.get('model');
+        col3.innerHTML = Item.get('year');
+        col4.innerHTML = Item.get('licensePlate');
+        col5.innerHTML = Item.get('VIN');
+
+        if(tag){        
+          col6.innerHTML = tag.get('name');
+          col7.innerHTML = '<button type="button" class="btn btn-warning" onclick="unlinkVehicle(\"'+tag.id+'\")">Remove Tag</button>';
+        }else{
+          col6.innerHTML = "No Tag Registered";
+          col7.innerHTML = '<button type="button" class="btn btn-success" onclick="linkVehicle()">Add Tag</button> ';
+        }
+        col7.innerHTML = '<button type="button" class="btn btn-danger" onclick="removeVeh(\"'+tag.id+'\")"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button> '
+    }
+
+    var removeVeh = function(id){
+      console.log("remove", id);
+      userVehicles.forEach(function(car){
+        if(car.id == id){
+          car.destroy({
+            success: function(myObject) {
+              // The object was deleted from the Parse Cloud.
+              alert("Vehicle Deleted");
+            },
+            error: function(myObject, error) {
+              // The delete failed.
+              // error is a Parse.Error with an error code and message.
+            }
+          });
+        }
+      })
+    }
+
+    var verifyFields = function(){
+      if(!$('#vehMake').val()){
+        alert("Vehicle make Missing");
+        return false;
+      }else if(!$('#vehModel').val()){
+        alert("Vehicle Model Missing");
+        return false;
+      }else if(!$('#VIN').val()){
+        alert("Vehicle VIN Number Missing");
+        return false;
+      }else if(!$('#vehYear').val()){
+        alert("Vehicle Year Missing");
+        return false;
+      }else if(!$('#vehPlate').val()){
+        alert("Vehicle License Plate Missing");
+        return false;
+      }else{
+        return true
+      }
+    }
+
+    var registerCar = function(data){
+      if(verifyFields()){
+        var toAdd = {
+          userID: currentUser,
+          make: $('#vehMake').val(),
+          model: $('#vehModel').val(),
+          VIN: $('#VIN').val(),
+          year: parseInt($('#vehYear').val()),
+          licensePlate: $('#vehPlate').val()
+        };
+        if($('#tagCar').val()){
+          toAdd.tagID = {"__type":"Pointer","className":"Tag","objectId":$('#tagCar').val()};
+        }
+      console.log("Register Veh", toAdd);
+      var Veh = Parse.Object.extend("Vehicle");
+      var veh = new Veh();
+      veh.save(toAdd, {
+          success: function(car) {
+            // The object was saved successfully.
+            
+            if(userVehicles[$('#carNumber').val()]){
+              addCar(car, userVehicles[$('#carNumber').val()]);
+            }else{
+              addCar(car,false);
+            }
+            $('#vehMake').val('');
+            $('#vehModel').val('');
+            $('#VIN').val('');
+            $('#vehPlate').val('');
+            $('#vehYear').val('');
+            $('#myModal').modal('hide');
+          },
+          error: function(car, error) {
+            // The save failed.
+            // error is a Parse.Error with an error code and message.
+            console.log("ERROR",error);
+          }
+        });
+      }
+    }
+
+    
+    $(document).ready(function($) {
+
+      // $('.grid').masonry({
+      //   // options...
+      //   itemSelector: '.grid-item',
+      //   position:"relative",
+      //   display:"inline-block",
+      //   columnWidth: 325,
+      // });
+
+      
+      $("select").selectOrDie({
+        onChange: function() { console.log("seleced", $(this).val()); }
+      });
+
+    });
+
+  </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
+<script type="text/javascript" src="/js/jquery.menu-aim.js"></script>
+<!-- <script type="text/javascript" src="/js/tether.min.js"></script> -->
+<script type="text/javascript" src="/js/selectordie.js"></script>
+<script src="/js/bootstrap.min.js"></script> <!-- Bootstrap -->
+<script src="/js/sidebar.js"></script> <!-- Gem jQuery -->
+</body>
+</html>
