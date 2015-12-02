@@ -43,7 +43,7 @@
 
     <nav class="cd-nav">
       <ul class="cd-top-nav">
-        <li><a href="#0" class="walletCount">Wallet</a></li>
+        <li><a href="views/profile/manage.html" class="walletCount">Wallet</a></li>
         <!-- <li><a href="#0">Support</a></li> -->
         <li class="has-children account">
           <a href="#0">
@@ -53,7 +53,7 @@
 
           <ul>
 
-            <li><a href="#0">My Account</a></li>
+            <li><a href="/views/profile/manage.html">My Account</a></li>
             <li><a href="#0">Edit Account</a></li>
             <li><a id="logout" onClick="logMeOut()" href="#0">Logout</a></li>
           </ul>
@@ -102,29 +102,27 @@
         <li class="has-children dollar">
           <a href="/views/wallet/manage.html">Wallet</a>
           
-          <!-- <ul>
-            <li><a href="#0">View Wallet</a></li>
+          <ul>
+            <!-- <li><a href="#0">View Wallet</a></li> -->
             <li><a href="/views/wallet/manage.html">Manage Wallet</a></li>
-            <li><a href="#0">Add Credits</a></li>
-          </ul> -->
+            <!-- <li><a href="#0">Add Credits</a></li> -->
+          </ul>
         </li>
 
         <li class="has-children tag">
-          <a href="#0">Tags</a>
-          
-          <!-- <ul>
-            <li><a href="#0">All Tags</a></li>
-            <li><a href="#0">Manage Tags</a></li>
-            <li><a href="#0">Import Tag</a></li>
-          </ul> -->
+          <a href="/views/tag/manage.html">Tags</a>
+          <ul>
+            <li><a href="/views/tag/view.html">View Tag</a></li>
+            <li><a href="/views/tag/manage.html">Manage Tags</a></li>
+          </ul>
         </li>
         <li class="has-children cars">
-          <a href="#0">Cars</a>
-          <!-- 
+          <a href="/views/vehicle/manage.html">Cars</a>
           <ul>
-            <li><a href="#0">All Cars</a></li>
-            <li><a href="#0">Manage Cars</a></li>
-          </ul> -->
+            <li><a href="/views/vehicle/view.html">View Vehicle</a></li>
+            <li><a href="/views/vehicle/manage.html">Manage Vehicles</a></li>
+          </ul>
+
         </li>
       </ul>
 
@@ -206,18 +204,18 @@
       tagQuery.equalTo("userID",currentUser);
       tagQuery.find().then(function(results){
         userTags = results;
-        console.log("User Tags", userTags);
+        // console.log("User Tags", userTags);
         var getVeh = Parse.Object.extend("Vehicle");
         var vehQuery = new Parse.Query(getVeh);
 
         vehQuery.containedIn("tagID", userTags);
         vehQuery.find().then(function(results){
           userVehicles = results;
-          console.log("cars", userVehicles);
+          // console.log("cars", userVehicles);
 
           if(userVehicles.forEach){
             userVehicles.forEach(function(car){
-              console.log("CAR", car.attributes);
+              // console.log("CAR", car.attributes);
               
               $(".basic").append("<option value="+car.attributes.tagID.id+">"+(car.attributes.make ? car.attributes.make:"")+" "+(car.attributes.model ? car.attributes.model:"")+"</option>");
               $("select").selectOrDie("update");
@@ -235,11 +233,7 @@
     walletQuery.first().then(function(result){
       // console.log("Wallet", result);
       $('.walletCount').html("Wallet $"+ (result.attributes.credits).toFixed(2));
-        
-
     });
-
-
 
     var currentTimer;
     var currentTag;
@@ -259,16 +253,16 @@
       tagQuery.equalTo("tagID",tagP);
       tagQuery.equalTo("paid",false);
       tagQuery.find().then(function(results){
-        // console.log("timeResults", results, tagP);
+        console.log("timeResults", results, tagP);
         if(results.forEach){
           results.forEach(function(hist){
-            // console.log(hist.attributes);
+            console.log("HISTORY", hist.attributes);
             currentTag = hist;
             var today = new Date();
             if(!hist.attributes.out){
-              // console.log("NOT OUT", hist.attributes.in, today);
+              console.log("NOT OUT: ", hist.attributes.in, today);
               currentTimer = new Date(today.getTime() - hist.attributes.in.getTime());
-              console.log(currentTimer);
+              // console.log(currentTimer);
               daysPassed = Math.ceil((currentTimer / (1000 * 3600 * 24))-1);
               // console.log("diff Days",daysPassed);
               // console.log("cTime",currentTimer.getHours(),currentTimer.getMinutes(), currentTimer.getSeconds());
@@ -279,16 +273,22 @@
           });
         }
       }).then(function(){
-        // console.log("THEN!", currentTag);
-        // console.log("ParkingID?", currentTag.get("parkingID"));
-        var parkP = {"__type":"Pointer","className":"Tag","objectId":tagID};
+        console.log("THEN! Current Tag: ", currentTag);
         var getRate = Parse.Object.extend("Rate");
-        var ratQuery = new Parse.Query(getRate);
-        ratQuery.equalTo("parkingID",currentTag.get("parkingID"));
-        ratQuery.first().then(function(result){
-          // console.log("Rates?",result);
-          currentRate = result;
+        var rateQuery = new Parse.Query(getRate);
+        // rateQuery.equalTo("parkingID",currentTag);
+        rateQuery.first({
+          success: function(object) {
+            // Successfully retrieved the object.
+            console.log("Parking",currentTag.get('parkingID'));
+            console.log("Rate?",object);
+            currentRate = object;
+          },
+          error: function(error) {
+            alert("Error: " + error.code + " " + error.message);
+          }
         });
+
       });
 
     };
@@ -321,11 +321,12 @@
               // console.log("TIME",time);
               var count = time;
               var cost = 0;
-              // console.log("passed?",daysPassed);
-              if(time && currentRate && currentRate.attributes) {
-                // console.log('interval', time);
+              // console.log("passed?",currentRate);
+              if(count && currentRate && currentRate.attributes) {
+                console.log('intervalcount', count);
+                cost = cost + currentRate.attributes.main;
+                console.log("CostMain? ",cost );
                 if(count >= 3600){
-                  cost = cost + currentRate.attributes.main;
                   count = count - 3600;
                   while(count >= 3600){
                     cost = cost + currentRate.attributes.perHour;
@@ -352,9 +353,9 @@
                     });
                     // $('.cost').tooltip({title: "Days Overdue: "+daysPassed, container: ".timer"});
                   }
-                  $('.cost').html("$"+(cost).toFixed(2));
-   
+                  
                 }
+                $('.cost').html("$"+(cost).toFixed(2));
               }
             }
           }
