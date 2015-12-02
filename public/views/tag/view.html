@@ -136,82 +136,23 @@
 
     <div class="content-wrapper grid" style="text-align:center;">
 
-      <p class="pageTitle featurette-heading" style="margin-top:45px;">Manage Tags</p>
+      <p class="pageTitle featurette-heading" style="margin-top:45px;">View Tag</p>
 
-      <div class="grid-item" style="display:inline-block; margin-top:2em; width: 200px;">
-
-          <!-- <button id="addCredits" class="action-btn" onClick="addCredits()">Add Credits</button> -->
-          
-          <div class="input-group" >
-            <!-- <input id type="number" class="creditAdd form-control" aria-label="..."> -->
-            <div class="input-group-btn">
-              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Add Tag</button>
-            </div>
-          </div>
-
-      </div>
       
-      <!-- Modal -->
-      <div id="myModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-
-          <!-- Modal content-->
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">Import Tag</h4>
-            </div>
-            <div class="modal-body" style="text-align:left;">
-
-              <fieldset>
-                <div class="control-group padMe">
-                      <label label-default="" class="control-label">Tag Name</label>
-                      <div class="controls">
-                          <div class="row">
-                              <div class="col-md-6">
-                                  <input id="tagName" type="text" class="form-control" autocomplete="off" maxlength="25" pattern="\d{4}" title="Tag Name" required="true">
-                              </div>
-                              <div class="col-md-6">
-                                  <select class="basic">
-                                      <option value="null">No Vehicle</option>
-                                  </select>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="control-group padMe">
-                      <label label-default="" class="control-label">Tag Number</label>
-                      <div class="controls">
-                          <div class="row">
-                              <div class="col-md-12">
-                                  <input id="tagNumber" type="text" class="form-control" autocomplete="off" maxlength="16" pattern="\d{4}" title="Tag digits" required="true" required>
-                              </div>
-                              
-                          </div>
-                      </div>
-                  </div>
-              </fieldset>
-
-
-            </div>
-            <div class="modal-footer control-group padMe">
-              <button type="submit" class="btn btn-primary" onclick="registerTag()">Submit</button> 
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-
-        </div>
+      <div class="grid-item" style="display:inline-block; margin-top:2em; position:relative;">
+        <select class="basic">
+            <option value="null">Select a Tag</option>
+        </select>
       </div>
 
       <div class="table table-responsive table-hover table-striped" style="text-align:left; margin-top:10px;">          
         <table class="table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Number</th>
-              <th>Import Date</th>
-              <th>Vehicle</th>
-              <th>Actions</th>
+              <th>Entrance Time</th>
+              <th>Exit Time</th>
+              <th>Paid</th>
+              <th>ParkingID</th>
             </tr>
           </thead>
           <tbody id="tableBody">
@@ -226,10 +167,18 @@
         </div>
       </div>
 
+      
+      
+
 
 
     </div> <!-- .content-wrapper
 
+    <!-- FOOTER -->
+    <!-- <footer class="content-wrapper">
+      <p class="pull-right"><a href="#">Back to top</a></p>
+      <p>&copy; 2015 EPM, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+    </footer> -->
 
 
   </main> <!-- .cd-main-content -->
@@ -245,14 +194,7 @@
       location = "/index.html";
     };
 
-    var unlinkVehicle = function(id){
-      console.log("unlinkVehicle", id);
-    }
-
-    var linkVehicle = function(id){
-      console.log("linkVehicle", id);
-    }
-
+    $(document).ready(function($) {
 
       Parse.initialize("2pWww3Mbn2k28ctC8O8G5Gtg4cVebSqXaMwNr0EC", "3db2YW8GZ7LBJqgwybtHhoKgBwmRWsJy4ZeiilcT");
     
@@ -290,47 +232,12 @@
         if(userTags.forEach){
             userTags.forEach(function(tag){
               console.log("tag", tag.attributes);
-              if(tag.get('vehicleID')){
-                var getVehicle = Parse.Object.extend("Vehicle");
-                var vehQuery = new Parse.Query(getVehicle);
-                vehQuery.equalTo("tagID",tag);
-                vehQuery.first({
-                  success: function(result) {
-                    addTag(tag, result); 
-                  },
-                  error: function(error) {
-                    alert("Error: " + error.code + " " + error.message);
-                  }
-                });
-              }else{
-                addTag(tag, false); 
-              }
+              
+              $(".basic").append("<option value="+tag.id+">"+(tag.attributes.name ? tag.attributes.name:(tag.attributes.rfidTag))+"</option>");
+              $("select").selectOrDie("update");
             });
           }
 
-      });
-
-      var getVehicle = Parse.Object.extend("Vehicle");
-      var vehQuery = new Parse.Query(getVehicle);
-      vehQuery.equalTo("userID",currentUser);
-      vehQuery.find({
-        success: function(results) {
-          userVehicles = results;
-          console.log("User Vehicles", userVehicles);
-        
-        if(userVehicles.forEach){
-            userVehicles.forEach(function(car){
-              if(!car.get('tagID')){
-                console.log("car", car.attributes);
-                $(".basic").append("<option value="+car.id+">"+(car.attributes.make && car.attributes.model ? car.attributes.make+" "+ car.attributes.model:(car.attributes.licensePlate))+"</option>");
-                $("select").selectOrDie("update");
-              }
-            });
-          }
-        },
-        error: function(error) {
-          alert("Error: " + error.code + " " + error.message);
-        }
       });
 
 
@@ -340,84 +247,53 @@
     walletQuery.first().then(function(result){
       // console.log("Wallet", result);
       $('.walletCount').html("Wallet $"+ (result.attributes.credits).toFixed(2));
+        
+
     });
 
-    var addTag = function(item, car) {
-        console.log("additem", item);
+
+
+    var currentTag;
+    var getHistory = function(tagID){
+
+      var tagP = {"__type":"Pointer","className":"Tag","objectId":tagID};
+      var getTag = Parse.Object.extend("History");
+      var tagQuery = new Parse.Query(getTag);
+      tagQuery.equalTo("tagID",tagP);
+      tagQuery.find({
+        success: function(results) {
+          console.log("History", results);
+          results.forEach(function(hist){
+            addHistory(hist);
+          });
+        },
+        error: function(error) {
+          alert("Error: " + error.code + " " + error.message);
+        }
+      });
+    };
+    
+    var addHistory = function(history) {
+        console.log("addHistory", history);
         var table = document.getElementById("tableBody");
         var row = table.insertRow(0);
-        var col1 = row.insertCell(0);
-        var col2 = row.insertCell(1);
-        var col3 = row.insertCell(2);
-        var col4 = row.insertCell(3);
-        var col5 = row.insertCell(4);
-        col1.innerHTML = item.get('name');
-        col2.innerHTML = item.get('rfidTag');
-        col3.innerHTML = item.get('createdAt').toDateString();
-        if(car){
-          col4.innerHTML = car.get('make') +" "+ car.get('model') +" "+ car.get('year');
-          console.log("VID", item.get('vehicleID'));
-
-          col5.innerHTML = '<button type="button" class="btn btn-warning" onclick="unlinkVehicle()">Remove Vehicle</button> ';
-
+        var date = row.insertCell(0);
+        var credit = row.insertCell(1);
+        var debit = row.insertCell(2);
+        var balance = row.insertCell(3);
+        date.innerHTML = history.get('in').toDateString();
+        if(history.get('out')){
+          credit.innerHTML = history.get('out');
         }else{
-          col4.innerHTML = "No Vehicle Registered";
-          col5.innerHTML = '<button type="button" class="btn btn-success" onclick="linkVehicle()">Add Vehicle</button> ';
+          credit.innerHTML = "In Parking";
         }
         
+        debit.innerHTML = history.get('paid');
+        balance.innerHTML = history.get('parkingID');
         
-        console.log("Tag Added");
+        console.log("Transaction Added");
     }
-
-    var verifyFields = function(){
-      if(!$('#tagName').val()){
-        alert("Tag Name Missing");
-        return false;
-      }else if(!$('#tagNumber').val()){
-        alert("Tag Number Missing");
-        return false;
-      }else{
-        return true
-      }
-    }
-
-    var registerTag = function(data){
-      if(verifyFields()){
-        var toAdd = {
-          name: $('#tagName').val(),
-          userID: currentUser,
-          rfidTag:$('#tagNumber').val()
-        };
-        if($('#tagCar').val()){
-          toAdd.vehicleID = $('#tagCar').val();
-        }
-      console.log("Register Tag", toAdd);
-      var TAG = Parse.Object.extend("Tag");
-      var tag = new TAG();
-      tag.save(toAdd, {
-          success: function(tag) {
-            // The object was saved successfully.
-            
-            if(userVehicles[$('#tagNumber').val()]){
-              addTag(tag, userVehicles[$('#tagNumber').val()]);
-            }else{
-              addTag(tag,false);
-            }
-            $('#tagName').val('');
-            $('#tagNumber').val('');
-            $('#myModal').modal('hide');
-          },
-          error: function(tag, error) {
-            // The save failed.
-            // error is a Parse.Error with an error code and message.
-            console.log("ERROR",error);
-          }
-        });
-      }
-    }
-
     
-    $(document).ready(function($) {
 
       // $('.grid').masonry({
       //   // options...
@@ -428,7 +304,11 @@
       // });
 
       $("select").selectOrDie({
-        onChange: function() { console.log("seleced", $(this).val()); }
+        
+        onChange: function() { 
+          $("#tableBody").empty();
+          getHistory($(this).val()); 
+        }
       });
 
     });
