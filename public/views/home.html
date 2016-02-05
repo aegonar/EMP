@@ -197,33 +197,40 @@
       }
 
       var userTags;
-      var userVehicles;
+      var userVehicles = [];
 
       var getTag = Parse.Object.extend("Tag");
       var tagQuery = new Parse.Query(getTag);
       tagQuery.equalTo("userID",currentUser);
       tagQuery.find().then(function(results){
         userTags = results;
-        // console.log("User Tags", userTags);
-        var getVeh = Parse.Object.extend("Vehicle");
-        var vehQuery = new Parse.Query(getVeh);
+        console.log("User Tags", userTags);
+      });
 
-        vehQuery.containedIn("tagID", userTags);
-        vehQuery.find().then(function(results){
+      var getVehicle = Parse.Object.extend("Vehicle");
+      var vehQuery = new Parse.Query(getVehicle);
+      vehQuery.equalTo("userID",currentUser);
+      vehQuery.find({
+        success: function(results) {
           userVehicles = results;
-          // console.log("cars", userVehicles);
-
-          if(userVehicles.forEach){
+        console.log("User Tags", userVehicles);
+        
+        if(userVehicles.forEach){
             userVehicles.forEach(function(car){
-              // console.log("CAR", car.attributes);
-              
-              $(".basic").append("<option value="+car.attributes.tagID.id+">"+(car.attributes.make ? car.attributes.make:"")+" "+(car.attributes.model ? car.attributes.model:"")+"</option>");
+              console.log("car", car.attributes);
+              var theID = 0;
+              console.log("TE ID", car.attributes.tadID);
+              if(car.attributes && car.attributes.tagID && car.attributes.tagID.id){
+                theID = car.attributes.tagID.id;
+              }
+              $(".basic").append("<option value="+theID+">"+(car.attributes.make && car.attributes.model ? car.attributes.make+" "+ car.attributes.model:(car.attributes.licensePlate))+"</option>");
               $("select").selectOrDie("update");
             });
           }
-
-        });
-
+        },
+        error: function(error) {
+          alert("Error: " + error.code + " " + error.message);
+        }
       });
 
 
@@ -279,6 +286,7 @@
         // rateQuery.equalTo("parkingID",currentTag);
         rateQuery.first({
           success: function(object) {
+            console.log("currentTag, parking", currentTag);
             // Successfully retrieved the object.
             console.log("Parking",currentTag.get('parkingID'));
             console.log("Rate?",object);
@@ -370,7 +378,16 @@
       });
 
       $("select").selectOrDie({
-        onChange: function() { getTime($(this).val()); }
+        onChange: function() { 
+          // userTags.forEach(function(tag){
+          //   if(tag.id == $(this).val()){
+          //     console.log("currentTag forEach", tag);
+          //     currentTag = tag;
+          //   }
+          // });
+        console.log("selected", $(this).val());
+          getTime($(this).val()); 
+        }
       });
 
     });

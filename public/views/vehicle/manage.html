@@ -320,7 +320,7 @@
 
                 var getTag = Parse.Object.extend("Tag");
                 var tagQuery = new Parse.Query(getTag);
-                tagQuery.equalTo("userID",currentUser);
+                tagQuery.equalTo("vehicleID",car);
                 tagQuery.first().then(function(result){
                   addCar(car, result);        
                 });
@@ -395,12 +395,23 @@
 
         if(tag){        
           col6.innerHTML = tag.get('name');
-          col7.innerHTML = '<button type="button" class="btn btn-warning" onclick="unlinkVehicle(\"'+tag.id+'\")">Remove Tag</button>';
+          // col7.innerHTML = '<button type="button" class="btn btn-warning" onclick="unlinkVehicle(\"'+tag.id+'\")">Remove Tag</button>';
         }else{
           col6.innerHTML = "No Tag Registered";
-          col7.innerHTML = '<button type="button" class="btn btn-success" onclick="linkVehicle()">Add Tag</button> ';
+          // col7.innerHTML = '<button type="button" class="btn btn-success" onclick="linkVehicle()">Add Tag</button> ';
         }
-        col7.innerHTML = '<button type="button" class="btn btn-danger" onclick="removeVeh(\"'+tag.id+'\")"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button> '
+        // col7.innerHTML = "<button type='button' class='btn btn-danger' onclick='removeVeh(\'"+Item.id+"\')'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button>";
+
+          // var col7 = row.insertCell(8);
+          var rem = document.createElement("button");        // Create a <button> element
+          rem.id = "rem"+Item.id;
+          rem.type = "button";
+          rem.className = "btn btn-danger";
+          rem.onclick = function(){
+            removeVeh(Item.id);
+          };
+          rem.innerHTML = "<span class='glyphicon glyphicon-trash' aria-hidden='true'></span>";
+          col7.appendChild(rem); 
     }
 
     var removeVeh = function(id){
@@ -418,8 +429,8 @@
             }
           });
         }
-      })
-    }
+      });
+    };
 
     var verifyFields = function(){
       if(!$('#vehMake').val()){
@@ -461,12 +472,30 @@
       veh.save(toAdd, {
           success: function(car) {
             // The object was saved successfully.
-            
-            if(userVehicles[$('#carNumber').val()]){
-              addCar(car, userVehicles[$('#carNumber').val()]);
+
+            if($('#tagCar').val()){
+              
+              userTags.forEach(function(tag){
+              if(tag.id == $('#tagCar').val()){
+                tag.save({vehicleID: car},{
+                  success: function() {
+                    console.log("Tag Edited");
+                    addCar(car, tag);
+                  },
+                  error: function(car, error) {
+                    // The save failed.
+                    // error is a Parse.Error with an error code and message.
+                    console.log("ERROR",error);
+                  }
+                });
+              }
+            });
             }else{
               addCar(car,false);
             }
+            
+            
+            
             $('#vehMake').val('');
             $('#vehModel').val('');
             $('#VIN').val('');

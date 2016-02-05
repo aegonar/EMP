@@ -181,17 +181,7 @@
             </div>
           </div>
         </div>
-        <div class="item">
-          <img class="third-slide" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Third slide">
-          <div class="container">
-            <div class="carousel-caption">
-              <h1>One more for good measure.</h1>
-              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-              <!-- <p><a class="btn btn-lg btn-primary" href="#" role="button">Browse gallery</a></p> -->
-            </div>
-          </div>
-        </div>
-      </div>
+        
       <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
         <span class="sr-only">Previous</span>
@@ -214,19 +204,19 @@
         <div class="col-lg-4">
           <img class="img-circle" src="/img/EPM/coin.png" alt="Generic placeholder image" width="140" height="140">
           <h3 class="featurette-heading" style="margin-top:0px;">Easy Payment</h3>
-          <p class="lead">Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
+          <p class="lead">Ticket machines are a thing of the past, now you can just pay online from anywhere.</p>
           <!-- <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p> -->
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-4">
           <img class="img-circle" src="/img/EPM/chip.png" alt="Generic placeholder image" width="140" height="140">
           <h3 class="featurette-heading" style="margin-top:0px;">Self Controlled</h3>
-          <p class="lead">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+          <p class="lead">Our system provides seamless experience and security between the user and the consumer, by having minimal to no interaction required.</p>
           <!-- <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p> -->
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-4">
           <img class="img-circle" src="/img/EPM/db.png" alt="Generic placeholder image" width="140" height="140">
           <h3 class="featurette-heading" style="margin-top:0px;">Usage Log</h3>
-          <p class="lead">Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+          <p class="lead">Every user action and transaction is recorded. Giving you the ability to analyse and monitor your parking activity.</p>
           <!-- <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p> -->
         </div><!-- /.col-lg-4 -->
       </div><!-- /.row -->
@@ -238,15 +228,15 @@
 
       <div class="row featurette">
         <div class="col-md-7">
-          <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It'll blow your mind.</span></h2>
-          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+          <h2 class="featurette-heading">Parking <span class="text-muted">Solution</span></h2>
+          <p class="lead">For many years the standard parking process involves, retrieving a parking ticket once you arrive, having to store that ticket safely, and worst of all having to divert yourself towards a parking paying station, where you can be greeted by the unforgiving parking ticket payment line. Why go through all this every time?</p>
         </div>
         <div class="col-md-5">
-          <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+          <!-- <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image"> -->
         </div>
       </div>
 
-      <hr class="featurette-divider">
+      <!-- <hr class="featurette-divider">
 
       <div class="row featurette">
         <div class="col-md-7 col-md-push-5">
@@ -256,17 +246,17 @@
         <div class="col-md-5 col-md-pull-7">
           <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
         </div>
-      </div>
+      </div> -->
 
       <hr class="featurette-divider">
 
       <div class="row featurette">
         <div class="col-md-7">
-          <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
-          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+          <h2 class="featurette-heading">The Goal <span class="text-muted">EMP</span></h2>
+          <p class="lead">Our system provides seamless experience and security between the user and the consumer, by having minimal to no interaction required and by logging every action taken, operate a parking becomes a lot easier since everything is being taken care by our EPM system.</p>
         </div>
         <div class="col-md-5">
-          <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+          <!-- <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image"> -->
         </div>
       </div>
 
@@ -336,7 +326,9 @@
           location = "/index.html";
         },
         error: function(user,error){
+
           console.log("Error: ", error.message);
+          alert("Error: Invalid Login Parameters");
           handleParseError(error)
         }
       });
@@ -383,8 +375,32 @@
             console.log("User SignUp Success");
             Parse.User.logIn(userName,password,{
               success: function(user){
-                console.log("Logged In");
-                location = "/index.html";
+                var Wallet = Parse.Object.extend("Wallet");
+                var wallet = new Wallet();
+                wallet.save({
+                  userID:user,
+                  credits:0
+                }, {
+                    success: function(gameScore) {
+                      console.log("Logged In");
+                      location = "/index.html";
+                    },
+                    error: function(gameScore, error) {
+                    }
+                  });
+                var UserInfo = Parse.Object.extend("UserInfo");
+                var userInfo = new UserInfo();
+                userInfo.save({
+                  userID:user,
+                  Name:user.get('username'),
+                  LastName:"",
+                  phone:0
+                }, {
+                    success: function(gameScore) {
+                    },
+                    error: function(gameScore, error) {
+                    }
+                  });
               },
               error: function(user,error){
                 console.log("Error: ", error.message);

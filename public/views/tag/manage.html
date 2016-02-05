@@ -358,16 +358,44 @@
           col4.innerHTML = car.get('make') +" "+ car.get('model') +" "+ car.get('year');
           console.log("VID", item.get('vehicleID'));
 
-          col5.innerHTML = '<button type="button" class="btn btn-warning" onclick="unlinkVehicle()">Remove Vehicle</button> ';
+          // col5.innerHTML = '<button type="button" class="btn btn-warning" onclick="unlinkVehicle()">Remove Vehicle</button> ';
 
         }else{
           col4.innerHTML = "No Vehicle Registered";
-          col5.innerHTML = '<button type="button" class="btn btn-success" onclick="linkVehicle()">Add Vehicle</button> ';
+          // col5.innerHTML = '<button type="button" class="btn btn-success" onclick="linkVehicle()">Add Vehicle</button> ';
         }
-        
+        var rem = document.createElement("button");        // Create a <button> element
+        rem.id = "rem"+item.id;
+        rem.type = "button";
+        rem.className = "btn btn-danger";
+        rem.onclick = function(){
+          removeTag(item.id);
+          // col5.innerHTML = "";
+          row.destroy();
+        };
+        rem.innerHTML = "<span class='glyphicon glyphicon-trash' aria-hidden='true'></span>";
+        col5.appendChild(rem); 
         
         console.log("Tag Added");
     }
+
+    var removeTag = function(id){
+      console.log("remove", id);
+      userTags.forEach(function(tag){
+        if(tag.id == id){
+          tag.destroy({
+            success: function(myObject) {
+              // The object was deleted from the Parse Cloud.
+              alert("Tag Deleted");
+            },
+            error: function(myObject, error) {
+              // The delete failed.
+              // error is a Parse.Error with an error code and message.
+            }
+          });
+        }
+      });
+    };
 
     var verifyFields = function(){
       if(!$('#tagName').val()){
@@ -398,11 +426,35 @@
           success: function(tag) {
             // The object was saved successfully.
             
-            if(userVehicles[$('#tagNumber').val()]){
-              addTag(tag, userVehicles[$('#tagNumber').val()]);
+            // if(userVehicles[$('#tagNumber').val()]){
+            //   addTag(tag, userVehicles[$('#tagNumber').val()]);
+            // }else{
+            //   addTag(tag,false);
+            // }
+
+            if($('#tagCar').val()){
+              
+              userVehicles.forEach(function(car){
+              if(car.id == $('#tagCar').val()){
+                car.save({tagID: tag},{
+                  success: function() {
+                    console.log("car Edited");
+                    addTag(tag, car);
+                  },
+                  error: function(tag, error) {
+                    // The save failed.
+                    // error is a Parse.Error with an error code and message.
+                    console.log("ERROR",error);
+                  }
+                });
+              }
+            });
             }else{
               addTag(tag,false);
             }
+
+
+
             $('#tagName').val('');
             $('#tagNumber').val('');
             $('#myModal').modal('hide');

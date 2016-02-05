@@ -532,7 +532,7 @@ Parse.Cloud.define("ActiveTest", function(request, response) {
                                                                                                         console.log("mainRate: "+JSON.stringify(mainRate)); 
  
                                                                                                         if(mainRate<=balance){
-                                                                                                            var returnValue={authorization:1, message1:"Welcome "+userName, message2:"Balance: $"+balance};
+                                                                                                            var returnValue={authorization:1, message1:"Hello "+userName, message2:"Balance: $"+balance};
                                                                                                             response.success(returnValue);
                                                                                                         }else{
                                                                                                             console.log("ActiveTagObject: "+JSON.stringify(newActiveTag));
@@ -784,7 +784,7 @@ Parse.Cloud.define("ActiveTest", function(request, response) {
                                                                                                                                     updateWalletQuery.save(null, {
                                                                                                                                         success: function(updateWalletQuery) {
                                                                             
-                                                                                                                                        var returnValue={authorization:1, message1:"Bye "+userName+"!", message2:"$"+debit+" Balance: $"+(balance-debit)};
+                                                                                                                                        var returnValue={authorization:1, message1:"Bye "+userName, message2:"$"+debit+" Balance: $"+(balance-debit)};
                                                                                                                                         response.success(returnValue);
                                                                          
                                                                                                                                         },
